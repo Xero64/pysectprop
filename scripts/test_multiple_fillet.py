@@ -1,4 +1,5 @@
-#%% Import Dependencies
+#%%
+# Import Dependencies
 
 from IPython.display import display_markdown, HTML
 from pysectprop import set_format
@@ -7,7 +8,8 @@ from math import pi
 
 set_format(l1frm='{:.12f}', l2frm='{:.12f}', l3frm='{:.12f}', l4frm='{:.12f}')
 
-#%% Create Section
+#%%
+# Create Section
 
 radius = 2.0
 length = radius
@@ -20,15 +22,18 @@ sect = GeneralPolygon(y, z, r)
 
 # qcircle.translate(0.0, 4.0)
 
-#%% Display Parameters
+#%%
+# Display Parameters
 
 display_markdown(sect)
 
-#%% Plot Multiple Fillet
+#%%
+# Plot Multiple Fillet
 
 ax = sect.plot()
 
-#%% Check Path Objects
+#%%
+# Check Path Objects
 
 from math import degrees
 

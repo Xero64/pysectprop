@@ -1,4 +1,5 @@
-#%% Import Dependencies
+#%%
+# Import Dependencies
 
 from sympy import Symbol, simplify, expand
 from sympy.solvers.solvers import solve

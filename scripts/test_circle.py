@@ -1,4 +1,5 @@
-#%% Import Dependencies
+#%%
+# Import Dependencies
 
 from IPython.display import display_markdown, Markdown
 from pysectprop import set_format
@@ -7,7 +8,8 @@ from math import pi
 
 set_format(l1frm='.1f', l2frm='.4f', l3frm='.3f', l4frm='.4f', angfrm='.4f')
 
-#%% Create Section
+#%%
+# Create Section
 
 radius = 2.0
 length = radius
@@ -22,7 +24,8 @@ circle = GeneralSection(y, z, r)
 # zt = 7.2
 # circle.translate(yt, zt)
 
-#%% Display Parameters
+#%%
+# Display Parameters
 
 display_markdown(circle)
 
@@ -39,10 +42,12 @@ display_markdown(circle)
 # print('Iyy = {:g} mm**4'.format(Iyy))
 # print('Izz = {:g} mm**4'.format(Izz))
 
-#%% Plot Circle
+#%%
+# Plot Circle
 
 ax = circle.plot()
 
-#%% Display Build-Up
+#%%
+# Display Build-Up
 
 display_markdown(circle.build_up_table())

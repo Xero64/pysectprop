@@ -7,17 +7,21 @@ Section properties can be calculated used and displayed from standard section ge
 Example - Omega Section - test_omegasection.py:
 
 ``` python
-#%% Import Dependencies
+#%%
+# Import Dependencies
 from IPython.display import display
 from pysectprop.extruded import OmegaSection
 
-#%% Create Section
+#%%
+# Create Section
 omsect = OmegaSection(20.0, 1.6, 20.0, 1.6, 10.0, 1.6, rf=0.0, rl=0.0)
 
-#%% Display Section Properties
+#%%
+# Display Section Properties
 display(omsect)
 
-#%% Plot Section
+#%%
+# Plot Section
 ax = omsect.plot()
 ```
 

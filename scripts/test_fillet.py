@@ -1,4 +1,5 @@
-#%% Specify two segments
+#%%
+# Specify two segments
 
 from math import cos, sin, radians, acos, degrees, tan, sqrt
 
@@ -13,7 +14,8 @@ xc, yc = length, 0.0
 x = [xa, xb, xc]
 y = [ya, yb, yc]
 
-#%% Plot Original
+#%%
+# Plot Original
 
 from matplotlib.pyplot import figure
 
@@ -23,7 +25,8 @@ ax.grid(True)
 ax.set_aspect('equal')
 p = ax.plot(x, y, '-o')
 
-#%% Angle Between
+#%%
+# Angle Between
 
 dx1 = (xb-xa)
 dy1 = (yb-ya)
@@ -68,7 +71,8 @@ ax.set_aspect('equal')
 p = ax.plot(x, y, '-o')
 p = ax.plot([p1x, xr, p2x], [p1y, yr, p2y])
 
-#%% Check distance
+#%%
+# Check distance
 
 rad1 = ((xr-p1x)**2+(yr-p1y)**2)**0.5
 rad2 = ((xr-p2x)**2+(yr-p2y)**2)**0.5
@@ -77,7 +81,8 @@ print('ab = {:g}'.format(degrees(ab)))
 print('rad1 = {:g}'.format(rad1))
 print('rad2 = {:g}'.format(rad2))
 
-#%% Calculate Intermediate Points
+#%%
+# Calculate Intermediate Points
 
 k = 4*(sqrt(2)-1)/3
 
@@ -87,7 +92,8 @@ q1y = p1y+lp*k*dy1
 q2x = p2x-lp*k*dx2
 q2y = p2y-lp*k*dy2
 
-#%% Plot Path
+#%%
+# Plot Path
 
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch

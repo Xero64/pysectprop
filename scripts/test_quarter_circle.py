@@ -1,4 +1,5 @@
-#%% Import Dependencies
+#%%
+# Import Dependencies
 
 from IPython.display import display_markdown, HTML
 from pysectprop import set_format
@@ -7,7 +8,8 @@ from math import pi
 
 set_format(l1frm='{:.12f}', l2frm='{:.12f}', l3frm='{:.12f}', l4frm='{:.12f}')
 
-#%% Create Section
+#%%
+# Create Section
 
 radius = 2.0
 length = radius
@@ -20,7 +22,8 @@ qcircle1 = GeneralPolygon(y, z, r)
 
 # qcircle.translate(0.0, 4.0)
 
-#%% Display Parameters
+#%%
+# Display Parameters
 
 display_markdown(qcircle1)
 
@@ -42,12 +45,14 @@ print('cz = {:}'.format(cz))
 print('Iyy = {:}'.format(Iyy))
 print('Izz = {:}'.format(Izz))
 
-#%% Plot Circle
+#%%
+# Plot Circle
 
 ax = qcircle1.plot()
 # ax.set_xlim(-4.0, 2.0)
 
-#%% Circle Path
+#%%
+# Circle Path
 
 # from math import degrees
 
@@ -56,11 +61,13 @@ for obj in qcircle1.path:
     if hasattr(obj, 'pntf'):
         print(obj.pntf)
 
-#%% Display Build-Up
+#%%
+# Display Build-Up
 
 display_markdown(HTML(qcircle1.build_up_table()))
 
-#%% Quarter Circle 2
+#%%
+# Quarter Circle 2
 
 y2 = [0.0, 0.0, -radius, -radius]
 z2 = [0.0, radius, radius, 0.0]
@@ -74,7 +81,8 @@ display_markdown(qcircle2)
 
 display_markdown(HTML(qcircle2.build_up_table()))
 
-#%% Quarter Circle 3
+#%%
+# Quarter Circle 3
 
 y3 = [0.0, -radius, -radius, 0.0]
 z3 = [0.0, 0.0, -radius, -radius]
@@ -88,7 +96,8 @@ display_markdown(qcircle3)
 
 display_markdown(HTML(qcircle3.build_up_table()))
 
-#%% Quarter Circle 4
+#%%
+# Quarter Circle 4
 
 y4 = [0.0, 0.0, radius, radius]
 z4 = [0.0, -radius, -radius, 0.0]

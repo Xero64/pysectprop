@@ -1,10 +1,12 @@
-#%% Import Dependencies
+#%%
+# Import Dependencies
 
 from matplotlib.pyplot import figure
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch, Circle
 
-#%% Plot Path
+#%%
+# Plot Path
 
 path_data = [
     (Path.MOVETO, (1.58, -2.57)),
@@ -29,12 +31,14 @@ ax.add_patch(patch)
 ax.grid()
 ax.axis('equal')
 
-#%% Display Values
+#%%
+# Display Values
 
 print(codes)
 print(verts)
 
-#%% Test Circle
+#%%
+# Test Circle
 
 from math import tan, radians, sqrt
 
@@ -87,7 +91,8 @@ for vert in verts:
 
 ax.plot(x, y)
 
-#%% Clip Path
+#%%
+# Clip Path
 
 scale = 0.5
 
@@ -110,7 +115,8 @@ ax.add_patch(patch)
 ax.grid()
 ax.axis('equal')
 
-#%% Plot Scale Patch
+#%%
+# Plot Scale Patch
 
 fig = figure(figsize=(12, 8))
 ax = fig.gca()
