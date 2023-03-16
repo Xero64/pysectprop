@@ -49,6 +49,6 @@ $$
 ## Cozzone's Plastic Bending
 
 $$
-K = \frac{32 \cdot D_o \cdot \left( D_o^3-D_i^3 \right)}{3 \cdot \pi \cdot \left( D_o^4-D_i^4 \right)}
+K = \frac{16 \cdot D_o \cdot \left( D_o^3-D_i^3 \right)}{3 \cdot \pi \cdot \left( D_o^4-D_i^4 \right)}
 $$
 
