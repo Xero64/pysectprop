@@ -1,8 +1,12 @@
 #%%
-# Specify two segments
-
+# Import Dependencies
 from math import cos, sin, radians, acos, degrees, tan, sqrt
+from matplotlib.pyplot import figure
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 
+#%%
+# Specify two segments
 angle = -72.0
 length = 8.0
 radius = 2.8
@@ -16,9 +20,6 @@ y = [ya, yb, yc]
 
 #%%
 # Plot Original
-
-from matplotlib.pyplot import figure
-
 fig = figure(figsize=(12, 8))
 ax = fig.gca()
 ax.grid(True)
@@ -94,9 +95,6 @@ q2y = p2y-lp*k*dy2
 
 #%%
 # Plot Path
-
-from matplotlib.path import Path
-from matplotlib.patches import PathPatch
 
 verts = [
     (xa, ya),

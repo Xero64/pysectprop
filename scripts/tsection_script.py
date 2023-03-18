@@ -7,7 +7,8 @@ from pysectprop.extruded import TSection
 # Create T-Section
 tsect = TSection(32, 1.6, 38, 1.6, 1.0)
 display_markdown(tsect)
+ax = tsect.plot()
 
 #%%
-# Plot Section
-ax = tsect.plot()
+# Print to Standard Output
+print(tsect)

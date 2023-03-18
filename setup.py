@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pysectprop",
-    version="0.0.1",
+    version="0.1.0",
     author="Xero64",
     author_email="xero64@gmail.com",
     description="Python Section Property Calculator",

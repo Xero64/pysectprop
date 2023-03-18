@@ -1,21 +1,20 @@
 #%%
 # Import Dependencies
 from IPython.display import display_markdown
-from pymaterial import metal_from_library
-from pysectprop.formed import CSection
+from pysectprop.general import Material
+from pysectprop.formed import CSectionFormed
 from pysectprop import MaterialSection
-from pysectprop.results.materialsectionresult import SectionResult
+from pysectprop.results.sectionresult import SectionResult
 
 #%%
 # Create Section
-csect = CSection(19.2, 13.6, 13.6, 1.6, 1.6)
+csect = CSectionFormed(19.2, 13.6, 13.6, 1.6, 1.6, 'C Section (Formed)')
 
 #%%
 # Create Material
-source = 'al2024t3sheet.json'
-basis = 'A'
-thickness = 1.6 # mm
-alum = metal_from_library(source, basis, thickness)
+alum = Material(71000.0, label='Aluminium')
+alum.set_yield_strengths(280.0, 260.0)
+alum.set_ultimate_strengths(400.0, 380.0)
 
 #%%
 # Create Material Section
@@ -30,22 +29,22 @@ ax = msect.plot()
 # Loads
 lc_ult = 'Ultimate Load Case'
 lc_lim = 'Limit Load Case'
-SF = 1.5
+sf = 1.5
 Fx_ult = -1500.0
 My_ult = 20000.0
 Mz_ult = 8000.0
-Fx_lim = Fx_ult/SF
-My_lim = My_ult/SF
-Mz_lim = Mz_ult/SF
+Fx_lim = Fx_ult/sf
+My_lim = My_ult/sf
+Mz_lim = Mz_ult/sf
 
 #%%
 # Calculate Ultimate Section Axial Stresses
 ultsectres = SectionResult(msect)
-ultsectres.apply_load(lc_ult, 'Ultimate', Fx_ult, My_ult, Mz_ult)
+ultsectres.set_load(lc_ult, Fx_ult, My_ult, Mz_ult)
 display_markdown(ultsectres)
 
 #%%
 # Calculate Limit Section Axial Stresses
 limsectres = SectionResult(msect)
-limsectres.apply_load(lc_lim, 'Limit', Fx_lim, My_lim, Mz_lim)
+limsectres.set_load(lc_lim, Fx_lim, My_lim, Mz_lim, limit=True)
 display_markdown(limsectres)

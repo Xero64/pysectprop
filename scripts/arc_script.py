@@ -1,13 +1,12 @@
 #%%
 # Import Dependencies
-
+from math import sqrt
 from matplotlib.pyplot import figure
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch, Circle
 
 #%%
 # Plot Path
-
 path_data = [
     (Path.MOVETO, (1.58, -2.57)),
     (Path.CURVE4, (0.35, -1.1)),
@@ -39,8 +38,6 @@ print(verts)
 
 #%%
 # Test Circle
-
-from math import tan, radians, sqrt
 
 # angle = radians(30.0)
 # length = tan(angle)
@@ -93,7 +90,6 @@ ax.plot(x, y)
 
 #%%
 # Clip Path
-
 scale = 0.5
 
 scaleverts = []
@@ -117,7 +113,6 @@ ax.axis('equal')
 
 #%%
 # Plot Scale Patch
-
 fig = figure(figsize=(12, 8))
 ax = fig.gca()
 # ax.add_patch(patch)

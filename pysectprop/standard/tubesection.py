@@ -23,8 +23,10 @@ class TubeSection(GeneralSection):
     def __str__(self):
         mdstr = self.section_heading('Tube Section')
         table = MDTable()
-        table.add_column(f'd<sub>o</sub> ({config.lunit:s})', config.l1frm, data=[self.do])
-        table.add_column(f'd<sub>i</sub> ({config.lunit:s})', config.l1frm, data=[self.di])
+        table.add_column(f'd<sub>o</sub> ({config.lunit:s})',
+                         config.l1frm, data=[self.do])
+        table.add_column(f'd<sub>i</sub> ({config.lunit:s})',
+                         config.l1frm, data=[self.di])
         mdstr += str(table)
         mdstr += self.section_properties()
         return mdstr

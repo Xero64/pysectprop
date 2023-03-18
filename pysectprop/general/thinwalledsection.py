@@ -1,30 +1,31 @@
+from typing import List
 from math import pi, cos, sin, atan, degrees, atan2, radians
 from matplotlib.pyplot import figure
 from matplotlib.patches import Rectangle
 from py2md.classes import MDHeading, MDTable
 from .. import config
 
-class ThinWalledSection(object):
-    y = None
-    z = None
-    t = None
+class ThinWalledSection():
+    y: List[float] = None
+    z: List[float] = None
+    t: List[float] = None
     label: str = None
-    segs = None
-    _A = None
-    _Ay = None
-    _Az = None
-    _cy = None
-    _cz = None
-    _Ayy = None
-    _Azz = None
-    _Ayz = None
-    _Iyy = None
-    _Izz = None
-    _Iyz = None
-    _θp = None
-    _Iyp = None
-    _Izp = None
-    def __init__(self, y: list, z: list, t: list, label: str=None):
+    segs: List['WallSegment'] = None
+    _A: float = None
+    _Ay: float = None
+    _Az: float = None
+    _cy: float = None
+    _cz: float = None
+    _Ayy: float = None
+    _Azz: float = None
+    _Ayz: float = None
+    _Iyy: float = None
+    _Izz: float = None
+    _Iyz: float = None
+    _thp: float = None
+    _Iyp: float = None
+    _Izp: float = None
+    def __init__(self, y: list, z: list, t: list, label: str=None) -> None:
         lent = len(t)
         leny = len(y)
         lenz = len(z)
@@ -39,7 +40,7 @@ class ThinWalledSection(object):
         self.t = t
         self.label = label
         self.generate_segments()
-    def check_area(self, display=True):
+    def check_area(self, display=True) -> None:
         self._A = None
         if self.A < 0.0:
             if display:
@@ -49,7 +50,7 @@ class ThinWalledSection(object):
             self.t.reverse()
             self.generate_segments()
         self._A = None
-    def generate_segments(self):
+    def generate_segments(self) -> None:
         lent = len(self.t)
         lenp = len(self.y)
         self.segs = []
@@ -78,7 +79,7 @@ class ThinWalledSection(object):
         if lenp != lent:
             self.segs[0].set_free_at_a(True)
             self.segs[-1].set_free_at_b(True)
-    def reset(self):
+    def reset(self) -> None:
         self._A = None
         self._Ay = None
         self._Az = None
@@ -90,23 +91,23 @@ class ThinWalledSection(object):
         self._Iyy = None
         self._Izz = None
         self._Iyz = None
-        self._θp = None
+        self._thp = None
         self._Iyp = None
         self._Izp = None
         self.check_area(display=False)
-    def mirror_y(self):
+    def mirror_y(self) -> None:
         z = [-zi for zi in self.z]
         self.z = z
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
-    def mirror_z(self):
+    def mirror_z(self) -> None:
         y = [-yi for yi in self.y]
         self.y = y
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
-    def translate(self, yt: float, zt: float):
+    def translate(self, yt: float, zt: float) -> None:
         y = [-yi+yt for yi in self.y]
         self.y = y
         z = [-zi+zt for zi in self.z]
@@ -115,95 +116,95 @@ class ThinWalledSection(object):
         self.generate_segments()
         self.check_area(display=False)
     @property
-    def A(self):
+    def A(self) -> float:
         if self._A is None:
             self._A = 0.0
             for seg in self.segs:
                 self._A += seg.A
         return self._A
     @property
-    def Ay(self):
+    def Ay(self) -> float:
         if self._Ay is None:
             self._Ay = 0.0
             for seg in self.segs:
                 self._Ay += seg.Ay
         return self._Ay
     @property
-    def Az(self):
+    def Az(self) -> float:
         if self._Az is None:
             self._Az = 0.0
             for seg in self.segs:
                 self._Az += seg.Az
         return self._Az
     @property
-    def cy(self):
+    def cy(self) -> float:
         if self._cy is None:
             self._cy = self.Ay/self.A
         return self._cy
     @property
-    def cz(self):
+    def cz(self) -> float:
         if self._cz is None:
             self._cz = self.Az/self.A
         return self._cz
     @property
-    def Ayy(self):
+    def Ayy(self) -> float:
         if self._Ayy is None:
             self._Ayy = 0.0
             for seg in self.segs:
                 self._Ayy += seg.Ayy
         return self._Ayy
     @property
-    def Azz(self):
+    def Azz(self) -> float:
         if self._Azz is None:
             self._Azz = 0.0
             for seg in self.segs:
                 self._Azz += seg.Azz
         return self._Azz
     @property
-    def Ayz(self):
+    def Ayz(self) -> float:
         if self._Ayz is None:
             self._Ayz = 0.0
             for seg in self.segs:
                 self._Ayz += seg.Ayz
         return self._Ayz
     @property
-    def Iyy(self):
+    def Iyy(self) -> float:
         if self._Iyy is None:
-            self._Iyy = self.Azz-self.A*self.cz**2
+            self._Iyy = self.Azz - self.A*self.cz**2
         return self._Iyy
     @property
-    def Izz(self):
+    def Izz(self) -> float:
         if self._Izz is None:
-            self._Izz = self.Ayy-self.A*self.cy**2
+            self._Izz = self.Ayy - self.A*self.cy**2
         return self._Izz
     @property
-    def Iyz(self):
+    def Iyz(self) -> float:
         if self._Iyz is None:
-            self._Iyz = self.Ayz-self.A*self.cy*self.cz
+            self._Iyz = self.Ayz - self.A*self.cy*self.cz
         return self._Iyz
     @property
-    def θp(self):
-        if self._θp is None:
+    def thp(self) -> float:
+        if self._thp is None:
             tol = 1e-12
             if abs(2*self.Iyz) < tol:
-                self._θp = 0.0
+                self._thp = 0.0
             elif abs(self.Izz-self.Iyy) < tol:
-                self._θp = pi/4
+                self._thp = pi/4
             else:
-                self._θp = atan(2*self.Iyz/(self.Izz-self.Iyy))/2
-        return self._θp
+                self._thp = atan(2*self.Iyz/(self.Izz-self.Iyy))/2
+        return self._thp
     @property
-    def Iyp(self):
+    def Iyp(self) -> float:
         if self._Iyp is None:
-            c = cos(self.θp)
-            s = sin(self.θp)
+            c = cos(self.thp)
+            s = sin(self.thp)
             self._Iyp = self.Iyy*c**2+self.Izz*s**2-2*self.Iyz*c*s
         return self._Iyp
     @property
-    def Izp(self):
+    def Izp(self) -> float:
         if self._Izp is None:
-            c = cos(self.θp)
-            s = sin(self.θp)
+            c = cos(self.thp)
+            s = sin(self.thp)
             self._Izp = self.Iyy*s**2+self.Izz*c**2+2*self.Iyz*c*s
         return self._Izp
     def plot(self, ax=None):
@@ -225,13 +226,7 @@ class ThinWalledSection(object):
         ax.set_xlim(miny-maxt/2, maxy+maxt/2)
         ax.set_ylim(minz-maxt/2, maxz+maxt/2)
         return ax
-    def __repr__(self):
-        if self.label is None:
-            outstr = '<ThinWalledSection>'
-        else:
-            outstr = f'<ThinWalledSection {self.label:s}>'
-        return outstr
-    def __str__(self):
+    def _repr_markdown_(self) -> str:
         lunit = config.lunit
         l1frm = config.l1frm
         l2frm = config.l2frm
@@ -253,110 +248,159 @@ class ThinWalledSection(object):
         table.add_column(f'Ayy ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Ayy])
         table.add_column(f'Azz ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Azz])
         table.add_column(f'Ayz ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Ayz])
-        mdstr += str(table)
+        mdstr += table._repr_markdown_()
         table = MDTable()
-        table.add_column(f'I<sub>yy</sub> ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Iyy])
-        table.add_column(f'I<sub>zz</sub> ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Izz])
-        table.add_column(f'I<sub>yz</sub> ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Iyz])
-        table.add_column('&theta;<sub>p</sub> (&deg;)', angfrm, data=[degrees(self.θp)])
-        table.add_column(f'I<sub>yp</sub> ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Iyp])
-        table.add_column(f'I<sub>zp</sub> ({lunit:s}<sup>4</sup>)', l4frm, data=[self.Izp])
-        mdstr += str(table)
+        table.add_column(f'I<sub>yy</sub> ({lunit:s}<sup>4</sup>)', l4frm,
+                         data=[self.Iyy])
+        table.add_column(f'I<sub>zz</sub> ({lunit:s}<sup>4</sup>)', l4frm,
+                         data=[self.Izz])
+        table.add_column(f'I<sub>yz</sub> ({lunit:s}<sup>4</sup>)', l4frm,
+                         data=[self.Iyz])
+        table.add_column('&theta;<sub>p</sub> (&deg;)', angfrm,
+                         data=[degrees(self.thp)])
+        table.add_column(f'I<sub>yp</sub> ({lunit:s}<sup>4</sup>)', l4frm,
+                         data=[self.Iyp])
+        table.add_column(f'I<sub>zp</sub> ({lunit:s}<sup>4</sup>)', l4frm,
+                         data=[self.Izp])
+        mdstr += table._repr_markdown_()
         return mdstr
-    def _repr_markdown_(self):
-        return self.__str__()
+    def __str__(self) -> str:
+        lunit = config.lunit
+        l1frm = config.l1frm
+        l2frm = config.l2frm
+        l3frm = config.l3frm
+        l4frm = config.l4frm
+        angfrm = config.angfrm
+        if self.label is None:
+            head = 'Thin-Walled Section Properties'
+        else:
+            head = f'Thin-Walled Section Properties - {self.label:s}'
+        heading = MDHeading(head, 3)
+        outstr = str(heading)
+        table = MDTable()
+        table.add_column(f'A ({lunit:s}^2)', l2frm, data=[self.A])
+        table.add_column(f'Ay ({lunit:s}^3)', l3frm, data=[self.Ay])
+        table.add_column(f'Az ({lunit:s}^3)', l3frm, data=[self.Az])
+        table.add_column(f'c_y ({lunit:s})', l1frm, data=[self.cy])
+        table.add_column(f'c_z ({lunit:s})', l1frm, data=[self.cz])
+        table.add_column(f'Ayy ({lunit:s}^4)', l4frm, data=[self.Ayy])
+        table.add_column(f'Azz ({lunit:s}^4)', l4frm, data=[self.Azz])
+        table.add_column(f'Ayz ({lunit:s}^4)', l4frm, data=[self.Ayz])
+        outstr += str(table)
+        table = MDTable()
+        table.add_column(f'I_yy ({lunit:s}^4)', l4frm,
+                         data=[self.Iyy])
+        table.add_column(f'I_zz ({lunit:s}^4)', l4frm,
+                         data=[self.Izz])
+        table.add_column(f'I_yz ({lunit:s}^4)', l4frm,
+                         data=[self.Iyz])
+        table.add_column('th_p (deg)', angfrm,
+                         data=[degrees(self.thp)])
+        table.add_column(f'I_yp ({lunit:s}^4)', l4frm,
+                         data=[self.Iyp])
+        table.add_column(f'I_zp ({lunit:s}^4)', l4frm,
+                         data=[self.Izp])
+        outstr += str(table)
+        return outstr
+    def __repr__(self) -> str:
+        if self.label is None:
+            outstr = '<ThinWalledSection>'
+        else:
+            outstr = f'<ThinWalledSection {self.label:s}>'
+        return outstr
 
-class WallSegment(object):
-    ya = None
-    za = None
-    yb = None
-    zb = None
-    ts = None
-    fa = None
-    fb = None
-    dy = None
-    dz = None
-    ls = None
-    th = None
-    ccc = None
-    _A = None
-    _Ay = None
-    _Az = None
-    _cy = None
-    _cz = None
-    _Ayy = None
-    _Azz = None
-    _Ayz = None
-    _Iyy = None
-    _Izz = None
-    _Iyz = None
-    _θp = None
-    _Iyp = None
-    _Izp = None
-    def __init__(self, ya: float, za: float, yb: float, zb: float, ts: float):
+class WallSegment():
+    ya: float = None
+    za: float = None
+    yb: float = None
+    zb: float = None
+    ts: float = None
+    fa: float = None
+    fb: float = None
+    dy: float = None
+    dz: float = None
+    ls: float = None
+    th: float = None
+    _A: float = None
+    _Ay: float = None
+    _Az: float = None
+    _cy: float = None
+    _cz: float= None
+    _Ayy: float = None
+    _Azz: float = None
+    _Ayz: float = None
+    _Iyy: float = None
+    _Izz: float = None
+    _Iyz: float = None
+    _thp: float = None
+    _Iyp: float = None
+    _Izp: float = None
+    def __init__(self, ya: float, za: float, yb: float, zb: float, ts: float) -> None:
         self.ya = ya
         self.za = za
         self.yb = yb
         self.zb = zb
         self.ts = ts
         self.update()
-    def update(self):
+    def update(self) -> None:
         self.fa = False
         self.fb = False
         self.dy = self.yb-self.ya
         self.dz = self.zb-self.za
         self.ls = (self.dy**2+self.dz**2)**0.5
         self.th = degrees(atan2(self.dz, self.dy))
-    def set_free_at_a(self, fa):
+    def set_free_at_a(self, fa) -> None:
         self.fa = fa
-    def set_free_at_b(self, fb):
+    def set_free_at_b(self, fb) -> None:
         self.fb = fb
-    def is_oef(self):
+    def is_oef(self) -> bool:
         if self.fa and not self.fb:
             return True
         if not self.fa and self.fb:
             return True
         return False
-    def is_nef(self):
+    def is_nef(self) -> bool:
         if not self.fa and not self.fb:
             return True
         return False
     @property
-    def A(self):
+    def A(self) -> float:
         if self._A is None:
             self._A = self.ts*self.ls
         return self._A
     @property
-    def Ay(self):
+    def Ay(self) -> float:
         if self._Ay is None:
             self._Ay = self.A*(self.yb+self.ya)/2
         return self._Ay
     @property
-    def Az(self):
+    def Az(self) -> float:
         if self._Az is None:
             self._Az = self.A*(self.zb+self.za)/2
         return self._Az
     @property
-    def Ayy(self):
+    def Ayy(self) -> float:
         if self._Ayy is None:
             self._Ayy = self.A*(self.yb**2+self.yb*self.ya+self.ya**2)/3
         return self._Ayy
     @property
-    def Azz(self):
+    def Azz(self) -> float:
         if self._Azz is None:
             self._Azz = self.A*(self.zb**2+self.zb*self.za+self.za**2)/3
         return self._Azz
     @property
-    def Ayz(self):
+    def Ayz(self) -> float:
         if self._Ayz is None:
-            tmp = (self.zb*self.yb+self.za*self.ya+(self.zb*self.ya+self.za*self.yb)/2)/3
+            term1 = self.zb*self.yb + self.za*self.ya
+            term2 = self.zb*self.ya + self.za*self.yb
+            tmp = (term1 + term2/2)/3
             self._Ayz = self.A*tmp
         return self._Ayz
-    def mpl_rectangle(self):
+    def mpl_rectangle(self) -> Rectangle:
         thrad = radians(self.th)
         yo = self.ya+self.ts/2*sin(thrad)
         zo = self.za-self.ts/2*cos(thrad)
         rect = Rectangle((yo, zo), self.ls, self.ts, self.th)
         return rect
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '<WallSegment>'

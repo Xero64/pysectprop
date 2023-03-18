@@ -1,1 +1,1 @@
-from .sectionresult import SectionResult
+from .sectionresult import SectionResult as SectionResult

@@ -1,11 +1,6 @@
-from .lsection import LSection
-from .omegasection import OmegaSection
-from .isection import ISection
-from .jsection import JSection
-from .tsection import TSection
-from .zsection import ZSection
-from .rectanglesection import RectangleSection
-from .ssection import SSection
-from .circlesection import CircleSection
-from .tubesection import TubeSection
-from .semitubesection import SemiTubeSection
+from .lsection import LSection as LSection
+from .omegasection import OmegaSection as OmegaSection
+from .isection import ISection as ISection
+from .jsection import JSection as JSection
+from .tsection import TSection as TSection
+from .zsection import ZSection as ZSection
