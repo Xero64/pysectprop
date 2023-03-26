@@ -178,12 +178,41 @@ class CompositeSection():
             sectresult.set_load(loadcase, Fx, My, Mz, limit=limit)
             sectresults.append(sectresult)
         return sectresults
-    def __repr__(self) -> str:
+    def _repr_markdown_(self) -> str:
+        funit = config.funit
+        lunit = config.lunit
+        l1frm = config.l1frm
+        l2frm = config.l2frm
+        l3frm = config.l3frm
+        l4frm = config.l4frm
+        angfrm = config.angfrm
+        eiunit = f'{funit:s}.{lunit:s}<sup>2</sup>'
         if self.label is None:
-            outstr = '<CompositeSection>'
+            head = 'Composite Section Properties'
         else:
-            outstr = f'<CompositeSection {self.label:s}>'
-        return outstr
+            head = f'Composite Section Properties - {self.label:s}'
+        heading = MDHeading(head, 3)
+        mdstr = heading._repr_markdown_()
+        table = MDTable()
+        table.add_column(f'EA ({funit:s})', l2frm, data=[self.EA])
+        table.add_column(f'EAy ({funit:s}.{lunit:s})', l3frm, data=[self.EAy])
+        table.add_column(f'EAz ({funit:s}.{lunit:s})', l3frm, data=[self.EAz])
+        table.add_column(f'cy ({lunit:s})', l1frm, data=[self.cy])
+        table.add_column(f'cz ({lunit:s})', l1frm, data=[self.cz])
+        table.add_column(f'EAyy ({eiunit:s})', l4frm, data=[self.EAyy])
+        table.add_column(f'EAzz ({eiunit:s})', l4frm, data=[self.EAzz])
+        table.add_column(f'EAyz ({eiunit:s})', l4frm, data=[self.EAyz])
+        mdstr += table._repr_markdown_()
+        table = MDTable()
+        table.add_column(f'EI<sub>yy</sub> ({eiunit:s})', l4frm, data=[self.EIyy])
+        table.add_column(f'EI<sub>zz</sub> ({eiunit:s})', l4frm, data=[self.EIzz])
+        table.add_column(f'EI<sub>yz</sub> ({eiunit:s})', l4frm, data=[self.EIyz])
+        table.add_column('&theta;<sub>p</sub> (&deg;)', angfrm,
+                         data=[degrees(self.thp)])
+        table.add_column(f'EI<sub>yp</sub> ({eiunit:s})', l4frm, data=[self.EIyp])
+        table.add_column(f'EI<sub>zp</sub> ({eiunit:s})', l4frm, data=[self.EIzp])
+        mdstr += table._repr_markdown_()
+        return mdstr
     def __str__(self) -> str:
         funit = config.funit
         lunit = config.lunit
@@ -198,7 +227,7 @@ class CompositeSection():
         else:
             head = f'Composite Section Properties - {self.label:s}'
         heading = MDHeading(head, 3)
-        mdstr = str(heading)
+        mdstr = heading.__str__()
         table = MDTable()
         table.add_column(f'EA ({funit:s})', l2frm, data=[self.EA])
         table.add_column(f'EAy ({funit:s}.{lunit:s})', l3frm, data=[self.EAy])
@@ -208,19 +237,22 @@ class CompositeSection():
         table.add_column(f'EAyy ({eiunit:s})', l4frm, data=[self.EAyy])
         table.add_column(f'EAzz ({eiunit:s})', l4frm, data=[self.EAzz])
         table.add_column(f'EAyz ({eiunit:s})', l4frm, data=[self.EAyz])
-        mdstr += str(table)
+        mdstr += table.__str__()
         table = MDTable()
-        table.add_column(f'EI<sub>yy</sub> ({eiunit:s})', l4frm, data=[self.EIyy])
-        table.add_column(f'EI<sub>zz</sub> ({eiunit:s})', l4frm, data=[self.EIzz])
-        table.add_column(f'EI<sub>yz</sub> ({eiunit:s})', l4frm, data=[self.EIyz])
-        table.add_column('&theta;<sub>p</sub> (&deg;)', angfrm,
-                         data=[degrees(self.thp)])
-        table.add_column(f'EI<sub>yp</sub> ({eiunit:s})', l4frm, data=[self.EIyp])
-        table.add_column(f'EI<sub>zp</sub> ({eiunit:s})', l4frm, data=[self.EIzp])
-        mdstr += str(table)
+        table.add_column(f'EI_yy ({eiunit:s})', l4frm, data=[self.EIyy])
+        table.add_column(f'EI_zz ({eiunit:s})', l4frm, data=[self.EIzz])
+        table.add_column(f'EI_yz ({eiunit:s})', l4frm, data=[self.EIyz])
+        table.add_column('th_p (deg)', angfrm, data=[degrees(self.thp)])
+        table.add_column(f'EI_yp ({eiunit:s})', l4frm, data=[self.EIyp])
+        table.add_column(f'EI_zp ({eiunit:s})', l4frm, data=[self.EIzp])
+        mdstr += table.__str__()
         return mdstr
-    def _repr_markdown_(self) -> str:
-        return self.__str__()
+    def __repr__(self) -> str:
+        if self.label is None:
+            outstr = '<CompositeSection>'
+        else:
+            outstr = f'<CompositeSection {self.label:s}>'
+        return outstr
 
 def normalise_composite_section(compsect: CompositeSection,
                                 material: 'Material') -> str:
