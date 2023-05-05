@@ -26,6 +26,7 @@ class MaterialSection(GeneralSection):
         for k in section.__dict__:
             self.__dict__[k] = section.__dict__[k]
         self.material = material
+        self.reset()
     @property
     def EA(self) -> float:
         if self._EA is None:

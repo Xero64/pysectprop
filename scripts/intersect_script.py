@@ -3,6 +3,8 @@
 from sympy import Symbol, simplify, expand
 from sympy.solvers.solvers import solve
 
+#%%
+# Create Symbols
 ya = Symbol('ya', real=True)
 za = Symbol('za', real=True)
 va = Symbol('va', real=True)
@@ -15,6 +17,8 @@ vb = Symbol('vb', real=True)
 wb = Symbol('wb', real=True)
 lb = Symbol('lb', real=True)
 
+#%%
+# Solve Intersection
 eqy = ya+la*va-yb-lb*vb
 eqz = za+la*wa-zb-lb*wb
 

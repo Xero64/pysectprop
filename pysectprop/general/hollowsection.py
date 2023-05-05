@@ -1,5 +1,4 @@
-from math import atan, cos, degrees, pi, radians, sin, sqrt
-from typing import List, Tuple, Union
+from math import atan, degrees, pi, sqrt
 
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
@@ -7,18 +6,25 @@ from matplotlib.pyplot import figure
 from py2md.classes import MDHeading, MDTable
 
 from .. import config
-from .arc import Arc, arc_from_points
-from .line import Line
-from .point import Point
+from .generalsection import GeneralSection
 
 
-class GeneralSection():
-    y: List[float] = None
-    z: List[float] = None
-    r: List[float] = None
+class Hole(GeneralSection):
+    def check_area(self, display=True) -> None:
+        self._A = None
+        if self.A > 0.0:
+            if display:
+                print('Reversed coordinates.')
+            self.y.reverse()
+            self.z.reverse()
+            self.r.reverse()
+            self.generate_path()
+        self._A = None
+
+class HollowSection():
+    outer: GeneralSection = None
+    inner: Hole = None
     label: str = None
-    pnts: List[Point] = None
-    path: List[Union[Line, Arc]] = None
     _A: float = None
     _Ay: float = None
     _Az: float = None
@@ -36,12 +42,13 @@ class GeneralSection():
     _thp: float = None
     _Iyp: float = None
     _Izp: float = None
-    def __init__(self, y: List[float], z: List[float], r: List[float],
+    def __init__(self, outer: GeneralSection, inner: GeneralSection,
                  label: str=None) -> None:
-        newy, newz, newr = cleanup_points(y, z, r)
-        self.y = newy
-        self.z = newz
-        self.r = newr
+        self.outer = outer
+        inner.__class__ = Hole
+        inner.reset()
+        self.inner = inner
+        self.label = label
         if label is not None:
             self.label = label
         self.generate_path()
@@ -51,127 +58,52 @@ class GeneralSection():
         if self.A < 0.0:
             if display:
                 print('Reversed coordinates.')
-            self.y.reverse()
-            self.z.reverse()
-            self.r.reverse()
+            self.outer.y.reverse()
+            self.outer.z.reverse()
+            self.outer.r.reverse()
+            self.inner.y.reverse()
+            self.inner.z.reverse()
+            self.inner.r.reverse()
             self.generate_path()
         self._A = None
-    def generate_path(self) -> None:
-        numpnt = len(self.r)
-        pnts = []
-        for i in range(numpnt):
-            yi = self.y[i]
-            zi = self.z[i]
-            pnts.append(Point(yi, zi))
-        lines: List[Line] = []
-        for i in range(numpnt):
-            a = i
-            b = i+1
-            if b == numpnt:
-                b = 0
-            pnta = pnts[a]
-            pntb = pnts[b]
-            line = Line(pnta, pntb)
-            lines.append(line)
-        arcs: List[Arc] = []
-        for i in range(numpnt):
-            radius = self.r[i]
-            if i == 0:
-                a = -1
-            else:
-                a = i-1
-            b = i
-            linea = lines[a]
-            lineb = lines[b]
-            pnta = linea.pnta
-            pntb = linea.pntb
-            pntc = lineb.pntb
-            if radius != 0.0:
-                arc = arc_from_points(pnta, pntb, pntc, radius)
-            else:
-                arc = None
-            arcs.append(arc)
-        lentol = 1e-12
-        self.path = []
-        for i in range(numpnt):
-            a = i
-            b = i+1
-            if b == numpnt:
-                b = 0
-            arca = arcs[a]
-            arcb = arcs[b]
-            linea = lines[a]
-            if arca is None:
-                pnta = linea.pnta
-            else:
-                self.path.append(arca)
-                pnta = arca.pntb
-            if arcb is None:
-                pntb = linea.pntb
-            else:
-                pntb = arcb.pnta
-            line = Line(pnta, pntb)
-            if line.length > lentol:
-                self.path.append(line)
-        self.pnts = []
-        for obj in self.path:
-            self.pnts.append(obj.pnta)
     def reset(self) -> None:
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
         self.check_area(display=False)
+    def generate_path(self) -> None:
+        self.outer.generate_path()
+        self.inner.generate_path()
     def mirror_y(self) -> None:
-        z = [-zi for zi in self.z]
-        self.z = z
         self.reset()
-        self.generate_path()
-        self.check_area(display=False)
+        self.outer.mirror_y()
+        self.inner.mirror_y()
     def mirror_z(self) -> None:
-        y = [-yi for yi in self.y]
-        self.y = y
         self.reset()
-        self.generate_path()
-        self.check_area(display=False)
+        self.outer.mirror_z()
+        self.inner.mirror_z()
     def translate(self, yt: float, zt: float) -> None:
-        y = [-yi+yt for yi in self.y]
-        self.y = y
-        z = [-zi+zt for zi in self.z]
-        self.z = z
         self.reset()
-        self.generate_path()
-        self.check_area(display=False)
+        self.outer.translate(yt, zt)
+        self.inner.translate(yt, zt)
     def rotate(self, θr: float) -> None:
-        thrad = radians(θr)
-        costh = cos(thrad)
-        sinth = sin(thrad)
-        y = [yi*costh - zi*sinth for yi, zi in zip(self.y, self.z)]
-        z = [zi*costh + yi*sinth for yi, zi in zip(self.y, self.z)]
-        self.y = y
-        self.z = z
         self.reset()
-        self.generate_path()
-        self.check_area(display=False)
+        self.outer.rotate(θr)
+        self.inner.rotate(θr)
     @property
     def A(self) -> float:
         if self._A is None:
-            self._A = 0.0
-            for obj in self.path:
-                self._A += obj.A
+            self._A = self.outer.A + self.inner.A
         return self._A
     @property
     def Ay(self) -> float:
         if self._Ay is None:
-            self._Ay = 0.0
-            for obj in self.path:
-                self._Ay += obj.Ay
+            self._Ay = self.outer.Ay + self.inner.Ay
         return self._Ay
     @property
     def Az(self) -> float:
         if self._Az is None:
-            self._Az = 0.0
-            for obj in self.path:
-                self._Az += obj.Az
+            self._Az = self.outer.Az + self.inner.Az
         return self._Az
     @property
     def cy(self) -> float:
@@ -186,23 +118,17 @@ class GeneralSection():
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
-            self._Ayy = 0.0
-            for obj in self.path:
-                self._Ayy += obj.Ayy
+            self._Ayy = self.outer.Ayy + self.inner.Ayy
         return self._Ayy
     @property
     def Azz(self) -> float:
         if self._Azz is None:
-            self._Azz = 0.0
-            for obj in self.path:
-                self._Azz += obj.Azz
+            self._Azz = self.outer.Azz + self.inner.Azz
         return self._Azz
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
-            self._Ayz = 0.0
-            for obj in self.path:
-                self._Ayz += obj.Ayz
+            self._Ayz = self.outer.Ayz + self.inner.Ayz
         return self._Ayz
     @property
     def Iyy(self) -> float:
@@ -261,40 +187,27 @@ class GeneralSection():
             ax = fig.gca()
         verts = []
         codes = []
-        for obj in self.path:
+        for obj in self.outer.path:
             obj.add_path(verts, codes)
-        path = Path(verts, codes)
-        patch = PathPatch(path, alpha=0.8)
+        p1 = Path(verts, codes)
+        verts = []
+        codes = []
+        for obj in self.inner.path:
+            obj.add_path(verts, codes)
+        p2 = Path(verts, codes)
+        p = PathPatch(Path.make_compound_path(p1, p2), alpha=0.8)
+        ax.add_patch(p)
         ax.set_aspect('equal')
-        ax.add_patch(patch)
-        ax.set_xlim(min(self.y), max(self.y))
-        ax.set_ylim(min(self.z), max(self.z))
+        ax.set_xlim(min(self.outer.y), max(self.outer.y))
+        ax.set_ylim(min(self.outer.z), max(self.outer.z))
         return ax
     def plot_arc_control(self, ax=None):
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
-        for obj in self.path:
-            if isinstance(obj, Arc):
-                y = [obj.pntf.y, obj.pnta.y, obj.pntd.y,
-                     obj.pnte.y, obj.pntb.y, obj.pntf.y]
-                z = [obj.pntf.z, obj.pnta.z, obj.pntd.z,
-                     obj.pnte.z, obj.pntb.z, obj.pntf.z]
-                ax.plot(y, z)
+        self.outer.plot_arc_control(ax=ax)
+        self.inner.plot_arc_control(ax=ax)
         return ax
-    def build_up_table(self):
-        table = MDTable()
-        table.add_column('Item', '')
-        table.add_column('A', config.l2frm)
-        table.add_column('Ay', config.l3frm)
-        table.add_column('Az', config.l3frm)
-        table.add_column('Ayy', config.l4frm)
-        table.add_column('Azz', config.l4frm)
-        table.add_column('Ayz', config.l4frm)
-        for i, obj in enumerate(self.path):
-            table.add_row([i+1, obj.A, obj.Ay, obj.Az, obj.Ayy, obj.Azz, obj.Ayz])
-        table.add_row(['Total', self.A, self.Ay, self.Az, self.Ayy, self.Azz, self.Ayz])
-        return table
     def section_heading(self, head: str):
         if self.label is None:
             head = f'{head:s}'
@@ -311,7 +224,7 @@ class GeneralSection():
         angfrm = config.angfrm
         mdstr = ''
         if not nohead:
-            mdstr += self.section_heading('General Section')
+            mdstr += self.section_heading('Hollow Section')
         table = MDTable()
         if outtype == 'md':
             table.add_column(f'A ({lunit:s}<sup>2</sup>)', l2frm, data=[self.A])
@@ -369,31 +282,7 @@ class GeneralSection():
         return self.section_properties(nohead=False, outtype='str')
     def __repr__(self) -> str:
         if self.label is None:
-            outstr = '<GeneralSection>'
+            outstr = '<HollowSection>'
         else:
-            outstr = f'<GeneralSection {self.label:s}>'
+            outstr = f'<HollowSection {self.label:s}>'
         return outstr
-
-def cleanup_points(y: List[float], z: List[float],
-                   r: List[float]) -> Tuple[List[float], List[float], List[float]]:
-    keep = []
-    num = len(y)
-    for i in range(num):
-        a, b = i-1, i
-        if a < 0:
-            a = num-1
-        ya, za = y[a], z[a]
-        yb, zb = y[b], z[b]
-        if ya == yb and za == zb:
-            keep.append(False)
-        else:
-            keep.append(True)
-    newy, newz, newr = [], [], []
-    for i in range(num):
-        if keep[i]:
-            newy.append(y[i])
-            newz.append(z[i])
-            newr.append(r[i])
-        else:
-            print('Duplicate point removed.')
-    return newy, newz, newr

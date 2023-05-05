@@ -1,9 +1,12 @@
+from math import atan, atan2, cos, degrees, pi, radians, sin, sqrt
 from typing import List
-from math import pi, cos, sin, atan, degrees, atan2, radians
-from matplotlib.pyplot import figure
+
 from matplotlib.patches import Rectangle
+from matplotlib.pyplot import figure
 from py2md.classes import MDHeading, MDTable
+
 from .. import config
+
 
 class ThinWalledSection():
     y: List[float] = None
@@ -19,6 +22,9 @@ class ThinWalledSection():
     _Ayy: float = None
     _Azz: float = None
     _Ayz: float = None
+    _Iav: float = None
+    _Idf: float = None
+    _Isq: float = None
     _Iyy: float = None
     _Izz: float = None
     _Iyz: float = None
@@ -50,6 +56,11 @@ class ThinWalledSection():
             self.t.reverse()
             self.generate_segments()
         self._A = None
+    def reset(self) -> None:
+        for attr in self.__dict__:
+            if attr[0] == '_':
+                self.__dict__[attr] = None
+        self.check_area(display=False)
     def generate_segments(self) -> None:
         lent = len(self.t)
         lenp = len(self.y)
@@ -79,22 +90,6 @@ class ThinWalledSection():
         if lenp != lent:
             self.segs[0].set_free_at_a(True)
             self.segs[-1].set_free_at_b(True)
-    def reset(self) -> None:
-        self._A = None
-        self._Ay = None
-        self._Az = None
-        self._cy = None
-        self._cz = None
-        self._Ayy = None
-        self._Azz = None
-        self._Ayz = None
-        self._Iyy = None
-        self._Izz = None
-        self._Iyz = None
-        self._thp = None
-        self._Iyp = None
-        self._Izp = None
-        self.check_area(display=False)
     def mirror_y(self) -> None:
         z = [-zi for zi in self.z]
         self.z = z
@@ -183,29 +178,40 @@ class ThinWalledSection():
             self._Iyz = self.Ayz - self.A*self.cy*self.cz
         return self._Iyz
     @property
+    def Iav(self) -> float:
+        if self._Iav is None:
+            self._Iav = (self.Izz + self.Iyy)/2
+        return self._Iav
+    @property
+    def Idf(self) -> float:
+        if self._Idf is None:
+            self._Idf = (self.Izz - self.Iyy)/2
+        return self._Idf
+    @property
+    def Isq(self) -> float:
+        if self._Isq is None:
+            self._Isq = sqrt(self.Idf**2 + self.Iyz**2)
+        return self._Isq
+    @property
     def thp(self) -> float:
         if self._thp is None:
             tol = 1e-12
-            if abs(2*self.Iyz) < tol:
+            if abs(self.Iyz)/self.Iav < tol:
                 self._thp = 0.0
-            elif abs(self.Izz-self.Iyy) < tol:
+            elif abs(self.Idf)/self.Iav < tol:
                 self._thp = pi/4
             else:
-                self._thp = atan(2*self.Iyz/(self.Izz-self.Iyy))/2
+                self._thp = atan(self.Iyz/self.Idf)/2
         return self._thp
     @property
     def Iyp(self) -> float:
         if self._Iyp is None:
-            c = cos(self.thp)
-            s = sin(self.thp)
-            self._Iyp = self.Iyy*c**2+self.Izz*s**2-2*self.Iyz*c*s
+            self._Iyp = self.Iav + self.Isq
         return self._Iyp
     @property
     def Izp(self) -> float:
         if self._Izp is None:
-            c = cos(self.thp)
-            s = sin(self.thp)
-            self._Izp = self.Iyy*s**2+self.Izz*c**2+2*self.Iyz*c*s
+            self._Izp = self.Iav - self.Isq
         return self._Izp
     def plot(self, ax=None):
         if ax is None:

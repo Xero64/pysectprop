@@ -1,13 +1,14 @@
+from math import atan, degrees, pi, sqrt
 from typing import TYPE_CHECKING, List
-from math import cos, sin, pi, atan, degrees
-from matplotlib.pyplot import figure
-from matplotlib.path import Path
-from matplotlib.patches import PathPatch, Patch
+
 from matplotlib.collections import PatchCollection
-from matplotlib.pyplot import rcParams
+from matplotlib.patches import Patch, PathPatch
+from matplotlib.path import Path
+from matplotlib.pyplot import figure, rcParams
 from py2md.classes import MDHeading, MDTable
-from ..results.sectionresult import SectionResult
+
 from .. import config
+from ..results.sectionresult import SectionResult
 
 if TYPE_CHECKING:
     from .material import Material
@@ -27,6 +28,9 @@ class CompositeSection():
     _EIyy: float = None
     _EIzz: float = None
     _EIyz: float = None
+    _EIav: float = None
+    _EIdf: float = None
+    _EIsq: float = None
     _thp: float = None
     _EIyp: float = None
     _EIzp: float = None
@@ -116,29 +120,40 @@ class CompositeSection():
             self._EIyz = self.EAyz-self.EA*self.cy*self.cz
         return self._EIyz
     @property
+    def EIav(self) -> float:
+        if self._EIav is None:
+            self._EIav = (self.EIzz + self.EIyy)/2
+        return self._EIav
+    @property
+    def EIdf(self) -> float:
+        if self._EIdf is None:
+            self._EIdf = (self.EIzz - self.EIyy)/2
+        return self._EIdf
+    @property
+    def EIsq(self) -> float:
+        if self._EIsq is None:
+            self._EIsq = sqrt(self.EIdf**2 + self.EIyz**2)
+        return self._EIsq
+    @property
     def thp(self) -> float:
         if self._thp is None:
             tol = 1e-12
-            if abs(2*self.EIyz) < tol:
+            if abs(self.EIyz)/self.EIav < tol:
                 self._thp = 0.0
-            elif abs(self.EIzz-self.EIyy) < tol:
+            elif abs(self.EIdf)/self.EIav < tol:
                 self._thp = pi/4
             else:
-                self._thp = atan(2*self.EIyz/(self.EIzz-self.EIyy))/2
+                self._thp = atan(self.EIyz/self.EIdf)/2
         return self._thp
     @property
     def EIyp(self) -> float:
         if self._EIyp is None:
-            c = cos(self.thp)
-            s = sin(self.thp)
-            self._EIyp = self.EIyy*c**2+self.EIzz*s**2-2*self.EIyz*c*s
+            self._EIyp = self.EIav + self.EIsq
         return self._EIyp
     @property
     def EIzp(self) -> float:
         if self._EIzp is None:
-            c = cos(self.thp)
-            s = sin(self.thp)
-            self._EIzp = self.EIyy*s**2+self.EIzz*c**2+2*self.EIyz*c*s
+            self._EIzp = self.EIav - self.EIsq
         return self._EIzp
     def plot(self, ax=None, legloc: str='best'):
         if ax is None:
