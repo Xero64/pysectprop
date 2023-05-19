@@ -38,20 +38,9 @@ class CompositeSection():
         self.sections = sections
         self.label = label
     def reset(self) -> None:
-        self._EA = None
-        self._EAy = None
-        self._EAz = None
-        self._cy = None
-        self._cz = None
-        self._EAyy = None
-        self._EAzz = None
-        self._EAyz = None
-        self._EIyy = None
-        self._EIzz = None
-        self._EIyz = None
-        self._thp = None
-        self._EIyp = None
-        self._EIzp = None
+        for attr in self.__dict__:
+            if attr[0] == '_':
+                self.__dict__[attr] = None
     @property
     def EA(self) -> float:
         if self._EA is None:
@@ -160,8 +149,12 @@ class CompositeSection():
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
         ax.set_aspect('equal')
+        numsect = len(self.sections)
         prop_cycle = rcParams['axes.prop_cycle']
-        colors = prop_cycle.by_key()['color']
+        propcolors = prop_cycle.by_key()['color']
+        colors = []
+        while len(colors) < numsect:
+            colors.extend(propcolors)
         patches = []
         y, z = [], []
         legel = []

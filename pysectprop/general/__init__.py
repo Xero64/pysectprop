@@ -6,3 +6,4 @@ from .thinwalledsection import ThinWalledSection as ThinWalledSection
 from .hollowsection import Hole as Hole
 from .hollowsection import HollowSection as HollowSection
 from .material import Material as Material
+from .mould import Mould as Mould
