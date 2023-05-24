@@ -31,6 +31,7 @@ class ThinWalledSection():
     _thp: float = None
     _Iyp: float = None
     _Izp: float = None
+
     def __init__(self, y: list, z: list, t: list, label: str=None) -> None:
         lent = len(t)
         leny = len(y)
@@ -46,6 +47,7 @@ class ThinWalledSection():
         self.t = t
         self.label = label
         self.generate_segments()
+
     def check_area(self, display=True) -> None:
         self._A = None
         if self.A < 0.0:
@@ -56,11 +58,13 @@ class ThinWalledSection():
             self.t.reverse()
             self.generate_segments()
         self._A = None
+
     def reset(self) -> None:
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
         self.check_area(display=False)
+
     def generate_segments(self) -> None:
         lent = len(self.t)
         lenp = len(self.y)
@@ -90,18 +94,21 @@ class ThinWalledSection():
         if lenp != lent:
             self.segs[0].set_free_at_a(True)
             self.segs[-1].set_free_at_b(True)
+
     def mirror_y(self) -> None:
         z = [-zi for zi in self.z]
         self.z = z
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
+
     def mirror_z(self) -> None:
         y = [-yi for yi in self.y]
         self.y = y
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
+
     def translate(self, yt: float, zt: float) -> None:
         y = [-yi+yt for yi in self.y]
         self.y = y
@@ -110,6 +117,7 @@ class ThinWalledSection():
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
+
     @property
     def A(self) -> float:
         if self._A is None:
@@ -117,6 +125,7 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._A += seg.A
         return self._A
+
     @property
     def Ay(self) -> float:
         if self._Ay is None:
@@ -124,6 +133,7 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._Ay += seg.Ay
         return self._Ay
+
     @property
     def Az(self) -> float:
         if self._Az is None:
@@ -131,16 +141,19 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._Az += seg.Az
         return self._Az
+
     @property
     def cy(self) -> float:
         if self._cy is None:
             self._cy = self.Ay/self.A
         return self._cy
+
     @property
     def cz(self) -> float:
         if self._cz is None:
             self._cz = self.Az/self.A
         return self._cz
+
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
@@ -148,6 +161,7 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._Ayy += seg.Ayy
         return self._Ayy
+
     @property
     def Azz(self) -> float:
         if self._Azz is None:
@@ -155,6 +169,7 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._Azz += seg.Azz
         return self._Azz
+
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
@@ -162,36 +177,43 @@ class ThinWalledSection():
             for seg in self.segs:
                 self._Ayz += seg.Ayz
         return self._Ayz
+
     @property
     def Iyy(self) -> float:
         if self._Iyy is None:
             self._Iyy = self.Azz - self.A*self.cz**2
         return self._Iyy
+
     @property
     def Izz(self) -> float:
         if self._Izz is None:
             self._Izz = self.Ayy - self.A*self.cy**2
         return self._Izz
+
     @property
     def Iyz(self) -> float:
         if self._Iyz is None:
             self._Iyz = self.Ayz - self.A*self.cy*self.cz
         return self._Iyz
+
     @property
     def Iav(self) -> float:
         if self._Iav is None:
             self._Iav = (self.Izz + self.Iyy)/2
         return self._Iav
+
     @property
     def Idf(self) -> float:
         if self._Idf is None:
             self._Idf = (self.Izz - self.Iyy)/2
         return self._Idf
+
     @property
     def Isq(self) -> float:
         if self._Isq is None:
             self._Isq = sqrt(self.Idf**2 + self.Iyz**2)
         return self._Isq
+
     @property
     def thp(self) -> float:
         if self._thp is None:
@@ -203,16 +225,19 @@ class ThinWalledSection():
             else:
                 self._thp = atan(self.Iyz/self.Idf)/2
         return self._thp
+
     @property
     def Iyp(self) -> float:
         if self._Iyp is None:
             self._Iyp = self.Iav + self.Isq
         return self._Iyp
+
     @property
     def Izp(self) -> float:
         if self._Izp is None:
             self._Izp = self.Iav - self.Isq
         return self._Izp
+
     def plot(self, ax=None):
         if ax is None:
             fig = figure(figsize=(12, 8))
@@ -232,6 +257,7 @@ class ThinWalledSection():
         ax.set_xlim(miny-maxt/2, maxy+maxt/2)
         ax.set_ylim(minz-maxt/2, maxz+maxt/2)
         return ax
+
     def _repr_markdown_(self) -> str:
         lunit = config.lunit
         l1frm = config.l1frm
@@ -270,6 +296,7 @@ class ThinWalledSection():
                          data=[self.Izp])
         mdstr += table._repr_markdown_()
         return mdstr
+
     def __str__(self) -> str:
         lunit = config.lunit
         l1frm = config.l1frm
@@ -292,7 +319,7 @@ class ThinWalledSection():
         table.add_column(f'Ayy ({lunit:s}^4)', l4frm, data=[self.Ayy])
         table.add_column(f'Azz ({lunit:s}^4)', l4frm, data=[self.Azz])
         table.add_column(f'Ayz ({lunit:s}^4)', l4frm, data=[self.Ayz])
-        outstr += str(table)
+        outstr += table.__str__()
         table = MDTable()
         table.add_column(f'I_yy ({lunit:s}^4)', l4frm,
                          data=[self.Iyy])
@@ -306,8 +333,9 @@ class ThinWalledSection():
                          data=[self.Iyp])
         table.add_column(f'I_zp ({lunit:s}^4)', l4frm,
                          data=[self.Izp])
-        outstr += str(table)
+        outstr += table.__str__()
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<ThinWalledSection>'
@@ -341,6 +369,7 @@ class WallSegment():
     _thp: float = None
     _Iyp: float = None
     _Izp: float = None
+
     def __init__(self, ya: float, za: float, yb: float, zb: float, ts: float) -> None:
         self.ya = ya
         self.za = za
@@ -348,6 +377,7 @@ class WallSegment():
         self.zb = zb
         self.ts = ts
         self.update()
+
     def update(self) -> None:
         self.fa = False
         self.fb = False
@@ -355,45 +385,55 @@ class WallSegment():
         self.dz = self.zb-self.za
         self.ls = (self.dy**2+self.dz**2)**0.5
         self.th = degrees(atan2(self.dz, self.dy))
+
     def set_free_at_a(self, fa) -> None:
         self.fa = fa
+
     def set_free_at_b(self, fb) -> None:
         self.fb = fb
+
     def is_oef(self) -> bool:
         if self.fa and not self.fb:
             return True
         if not self.fa and self.fb:
             return True
         return False
+
     def is_nef(self) -> bool:
         if not self.fa and not self.fb:
             return True
         return False
+
     @property
     def A(self) -> float:
         if self._A is None:
             self._A = self.ts*self.ls
         return self._A
+
     @property
     def Ay(self) -> float:
         if self._Ay is None:
-            self._Ay = self.A*(self.yb+self.ya)/2
+            self._Ay = self.A*(self.yb + self.ya)/2
         return self._Ay
+
     @property
     def Az(self) -> float:
         if self._Az is None:
-            self._Az = self.A*(self.zb+self.za)/2
+            self._Az = self.A*(self.zb + self.za)/2
         return self._Az
+
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
-            self._Ayy = self.A*(self.yb**2+self.yb*self.ya+self.ya**2)/3
+            self._Ayy = self.A*(self.yb**2 + self.yb*self.ya + self.ya**2)/3
         return self._Ayy
+
     @property
     def Azz(self) -> float:
         if self._Azz is None:
-            self._Azz = self.A*(self.zb**2+self.zb*self.za+self.za**2)/3
+            self._Azz = self.A*(self.zb**2 + self.zb*self.za + self.za**2)/3
         return self._Azz
+
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
@@ -402,11 +442,13 @@ class WallSegment():
             tmp = (term1 + term2/2)/3
             self._Ayz = self.A*tmp
         return self._Ayz
+
     def mpl_rectangle(self) -> Rectangle:
         thrad = radians(self.th)
         yo = self.ya+self.ts/2*sin(thrad)
         zo = self.za-self.ts/2*cos(thrad)
         rect = Rectangle((yo, zo), self.ls, self.ts, self.th)
         return rect
+
     def __repr__(self) -> str:
         return '<WallSegment>'

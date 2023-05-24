@@ -12,6 +12,7 @@ class TubeSection(HollowSection):
         outer = CircleSection(do)
         inner = CircleSection(di)
         super().__init__(outer, inner, label=label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Tube-Section')
         table = MDTable()
@@ -22,6 +23,7 @@ class TubeSection(HollowSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Tube-Section')
         table = MDTable()
@@ -32,6 +34,7 @@ class TubeSection(HollowSection):
         outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<Tube-Section>'

@@ -14,16 +14,19 @@ class Line():
     _Ayy: float = None
     _Azz: float = None
     _Ayz: float = None
+
     def __init__(self, pnta: Point, pntb: Point):
         self.pnta = pnta
         self.pntb = pntb
+
     @property
     def length(self) -> float:
         if self._length is None:
             dy = self.pntb.y-self.pnta.y
             dz = self.pntb.z-self.pnta.z
-            self._length = sqrt(dy**2+dz**2)
+            self._length = sqrt(dy**2 + dz**2)
         return self._length
+
     @property
     def A(self) -> float:
         if self._A is None:
@@ -31,8 +34,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._A = (ya*zb-za*yb)/2
+            self._A = (ya*zb - za*yb)/2
         return self._A
+
     @property
     def Ay(self) -> float:
         if self._Ay is None:
@@ -40,8 +44,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._Ay = (ya*zb-za*yb)*(ya+yb)/6
+            self._Ay = (ya*zb - za*yb)*(ya + yb)/6
         return self._Ay
+
     @property
     def Az(self) -> float:
         if self._Az is None:
@@ -49,8 +54,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._Az = (ya*zb-za*yb)*(za+zb)/6
+            self._Az = (ya*zb - za*yb)*(za + zb)/6
         return self._Az
+
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
@@ -58,8 +64,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._Ayy = (ya**2+ya*yb+yb**2)*(ya*zb-yb*za)/12
+            self._Ayy = (ya**2 + ya*yb + yb**2)*(ya*zb - yb*za)/12
         return self._Ayy
+
     @property
     def Azz(self) -> float:
         if self._Azz is None:
@@ -67,8 +74,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._Azz = (za**2+za*zb+zb**2)*(ya*zb-yb*za)/12
+            self._Azz = (za**2 + za*zb + zb**2)*(ya*zb - yb*za)/12
         return self._Azz
+
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
@@ -76,8 +84,9 @@ class Line():
             za = self.pnta.z
             yb = self.pntb.y
             zb = self.pntb.z
-            self._Ayz = (ya*zb+2*ya*za+2*yb*zb+yb*za)*(ya*zb-yb*za)/24
+            self._Ayz = (ya*zb + 2*ya*za + 2*yb*zb + yb*za)*(ya*zb - yb*za)/24
         return self._Ayz
+
     def add_path(self, verts: Optional[List[Tuple[float, float]]]=None,
                  codes: Optional[List[float]]=None) -> Tuple[List[Tuple[float, float]],
                                                              List[float]]:
@@ -91,6 +100,7 @@ class Line():
         verts.append((self.pntb.y, self.pntb.z))
         codes.append(2)
         return verts, codes
+
     def _repr_markdown_(self) -> str:
         table = MDTable()
         table.add_column('Point', 's')
@@ -111,6 +121,7 @@ class Line():
                        self.Ayy, self.Azz, self.Ayz])
         mdstr += table._repr_markdown_()
         return mdstr
+
     def __str__(self) -> str:
         table = MDTable()
         table.add_column('Point', 's')
@@ -118,7 +129,7 @@ class Line():
         table.add_column('z', config.l1frm)
         table.add_row(['pnta', self.pnta.y, self.pnta.z])
         table.add_row(['pntb', self.pntb.y, self.pntb.z])
-        outstr = str(table)
+        outstr = table.__str__()
         table = MDTable()
         table.add_column('Type', 's')
         table.add_column('A', config.l2frm)
@@ -129,7 +140,8 @@ class Line():
         table.add_column('Ayz', config.l4frm)
         table.add_row(['Total', self.A, self.Ay, self.Az,
                        self.Ayy, self.Azz, self.Ayz])
-        outstr += str(table)
+        outstr += table.__str__()
         return outstr
+
     def __repr__(self) -> str:
         return f'<Line: {self.pnta}, {self.pntb}>'

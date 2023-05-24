@@ -24,6 +24,7 @@ class SectionResult():
     allowed: List[float] = None
     sigma: List[float] = None
     result: List[float] = None
+
     def __init__(self, materialsection: 'MaterialSection',
                  totalsection: Optional['CompositeSection']=None) -> None:
         self.materialsection = materialsection
@@ -32,6 +33,7 @@ class SectionResult():
         else:
             self.totalsection = totalsection
         self.msmode = False
+
     def set_load(self, loadcase, Fx, My, Mz, limit: bool=False) -> None:
         self.loadcase = loadcase
         self.limit = limit
@@ -81,6 +83,7 @@ class SectionResult():
                 result = allowed/sigma
             self.allowed.append(allowed)
             self.result.append(result)
+
     def _repr_markdown_(self) -> str:
         lctyp = 'Ultimate'
         if self.limit:
@@ -107,8 +110,9 @@ class SectionResult():
                 resi = resi-1.0
             table.add_row([self.y[i], self.z[i], self.yna[i], self.zna[i],
                            self.eps[i], self.sigma[i], self.allowed[i], resi])
-        mdstr += str(table)
+        mdstr += table.__str__()
         return mdstr
+
     def __str__(self) -> str:
         lctyp = 'Ultimate'
         if self.limit:
@@ -135,7 +139,8 @@ class SectionResult():
                 resi = resi-1.0
             table.add_row([self.y[i], self.z[i], self.yna[i], self.zna[i],
                            self.eps[i], self.sigma[i], self.allowed[i], resi])
-        mdstr += str(table)
+        mdstr += table.__str__()
         return mdstr
+
     def __repr__(self) -> str:
         return '<SectionResult>'

@@ -11,6 +11,7 @@ class OmegaSection(GeneralSection):
     tlf: float = None # Thickness of lower flange
     ruf: float = None # Radius of upper flange
     rlf: float = None # Radius of lower flange
+
     def __init__(self, hw: float, tw: float, wuf: float, tuf: float,
                  wlf: float, tlf: float, ruf: float=0.0, rlf: float=0.0,
                  label: str=None) -> None:
@@ -33,6 +34,7 @@ class OmegaSection(GeneralSection):
         r = [0.0, 0.0, self.rlf, 0.0, 0.0, 0.0, self.ruf, 0.0,
              self.ruf, 0.0, 0.0, 0.0, self.rlf, 0.0]
         super().__init__(y, z, r, label=label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Omega-Section')
         table = MDTable()
@@ -55,6 +57,7 @@ class OmegaSection(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Omega-Section')
         table = MDTable()
@@ -74,9 +77,10 @@ class OmegaSection(GeneralSection):
                          config.l1frm, data=[self.ruf])
         table.add_column(f'r_lf ({config.lunit:s})',
                          config.l1frm, data=[self.rlf])
-        outstr += str(table)
+        outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<Omega-Section>'

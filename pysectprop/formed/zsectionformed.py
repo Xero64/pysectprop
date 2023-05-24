@@ -9,6 +9,7 @@ class ZSectionFormed(GeneralSection):
     wlf: float = None # Width of upper flange
     ts: float = None # Thickness of section
     rm: float = None # Bend radius
+
     def __init__(self, hw: float, wlf: float, wuf: float, ts: float,
                  rm: float, label: str=None) -> None:
         self.hw = hw
@@ -23,11 +24,13 @@ class ZSectionFormed(GeneralSection):
         r = [self.rm+self.ts/2, 0.0, 0.0, self.rm-self.ts/2, self.rm+self.ts/2,
              0.0, 0.0, self.rm-self.ts/2]
         super().__init__(y, z, r, label=label)
+
     def to_thin_walled_section(self) -> ThinWalledSection:
         y = [self.wlf, self.ts/2, self.ts/2, self.ts/2-self.wuf]
         z = [self.ts/2, self.ts/2, self.hw-self.ts/2, self.hw-self.ts/2]
         t = [self.ts, self.ts, self.ts]
         return ThinWalledSection(y, z, t)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Z-Section')
         table = MDTable()
@@ -44,6 +47,7 @@ class ZSectionFormed(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Z-Section')
         table = MDTable()
@@ -57,9 +61,10 @@ class ZSectionFormed(GeneralSection):
                          config.l1frm, data=[self.ts])
         table.add_column(f'r<sub>m</sub> ({config.lunit:s})',
                          config.l1frm, data=[self.rm])
-        outstr += str(table)
+        outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<Z-Section>'

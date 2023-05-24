@@ -6,6 +6,7 @@ class RectangleSection(GeneralSection):
     h: float = None
     b: float = None
     rc: float = None
+
     def __init__(self, h: float, b: float, rc: float=0.0, label: str=None) -> None:
         self.h = h
         self.b = b
@@ -17,6 +18,7 @@ class RectangleSection(GeneralSection):
              self.h/2, self.h/2, -self.h/2]
         r = [self.rc, self.rc, self.rc, self.rc]
         super().__init__(y, z, r, label=label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Rectangle-Section')
         table = MDTable()
@@ -27,6 +29,7 @@ class RectangleSection(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Rectangle-Section')
         table = MDTable()
@@ -37,6 +40,7 @@ class RectangleSection(GeneralSection):
         outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<Rectangle-Section>'

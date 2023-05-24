@@ -9,6 +9,7 @@ from py2md.classes import MDHeading, MDTable
 
 from .. import config
 from ..results.sectionresult import SectionResult
+from .numericalsection import NumericalSection
 
 if TYPE_CHECKING:
     from .material import Material
@@ -264,42 +265,13 @@ class CompositeSection():
 
 def normalise_composite_section(compsect: CompositeSection,
                                 material: 'Material') -> str:
-    lunit = config.lunit
-    l1frm = config.l1frm
-    l2frm = config.l2frm
-    l3frm = config.l3frm
-    l4frm = config.l4frm
-    angfrm = config.angfrm
-    emod = material.E
-    # Needs material data added to this output for reference.
-    if compsect.label is None:
-        head = 'Normalised Composite Section Properties'
-    else:
-        head = f'Normalised Composite Section Properties - {compsect.label:s}'
-    heading = MDHeading(head, 3)
-    mdstr = str(heading)
-    table = MDTable()
-    table.add_column(f'A ({lunit:s}<sup>2</sup>)', l2frm, data=[compsect.EA/emod])
-    table.add_column(f'Ay ({lunit:s}<sup>3</sup>)', l3frm, data=[compsect.EAy/emod])
-    table.add_column(f'Az ({lunit:s}<sup>3</sup>)', l3frm, data=[compsect.EAz/emod])
-    table.add_column(f'cy ({lunit:s})', l1frm, data=[compsect.cy])
-    table.add_column(f'cz ({lunit:s})', l1frm, data=[compsect.cz])
-    table.add_column(f'Ayy ({lunit:s}<sup>4</sup>)', l4frm, data=[compsect.EAyy/emod])
-    table.add_column(f'Azz ({lunit:s}<sup>4</sup>)', l4frm, data=[compsect.EAzz/emod])
-    table.add_column(f'Ayz ({lunit:s}<sup>4</sup>)', l4frm, data=[compsect.EAyz/emod])
-    mdstr += str(table)
-    table = MDTable()
-    table.add_column(f'I<sub>yy</sub> ({lunit:s}<sup>4</sup>)', l4frm,
-                     data=[compsect.EIyy/emod])
-    table.add_column(f'I<sub>zz</sub> ({lunit:s}<sup>4</sup>)', l4frm,
-                     data=[compsect.EIzz/emod])
-    table.add_column(f'I<sub>yz</sub> ({lunit:s}<sup>4</sup>)', l4frm,
-                     data=[compsect.EIyz/emod])
-    table.add_column('&theta;<sub>p</sub> (&deg;)', angfrm,
-                     data=[degrees(compsect.thp)])
-    table.add_column(f'I<sub>yp</sub> ({lunit:s}<sup>4</sup>)', l4frm,
-                     data=[compsect.EIyp/emod])
-    table.add_column(f'I<sub>zp</sub> ({lunit:s}<sup>4</sup>)', l4frm,
-                     data=[compsect.EIzp/emod])
-    mdstr += str(table)
-    return mdstr
+
+    numsect = NumericalSection(compsect.label)
+    numsect._A = compsect.EA/material.E
+    numsect._Ay = compsect.EAy/material.E
+    numsect._Az = compsect.EAz/material.E
+    numsect._Ayy = compsect.EAyy/material.E
+    numsect._Azz = compsect.EAzz/material.E
+    numsect._Ayz = compsect.EAyz/material.E
+
+    return numsect

@@ -9,6 +9,7 @@ class CSectionFormed(GeneralSection):
     wlf: float = None # Width of upper flange
     ts: float = None # Thickness of section
     rm: float = None # Bend radius
+
     def __init__(self, hw: float, wuf: float, wlf: float, ts: float,
                  rm: float, label: str=None) -> None:
         self.hw = hw
@@ -27,11 +28,13 @@ class CSectionFormed(GeneralSection):
             ro = self.rm+self.ts/2
             r = [ro, 0.0, 0.0, ri, ri, 0.0, 0.0, ro]
         super().__init__(y, z, r, label=label)
+
     def to_thin_walled_section(self) -> ThinWalledSection:
         y = [self.wlf, self.ts/2, self.ts/2, self.wuf]
         z = [self.ts/2, self.ts/2, self.hw-self.ts/2, self.hw-self.ts/2]
         t = [self.ts, self.ts, self.ts]
         return ThinWalledSection(y, z, t)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('C-Section')
         table = MDTable()
@@ -48,6 +51,7 @@ class CSectionFormed(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         mdstr = self.section_heading('C-Section')
         table = MDTable()
@@ -61,9 +65,10 @@ class CSectionFormed(GeneralSection):
                          config.l1frm, data=[self.ts])
         table.add_column(f'r_m ({config.lunit:s})',
                          config.l1frm, data=[self.rm])
-        mdstr += str(table)
+        mdstr += table.__str__()
         mdstr += self.section_properties(outtype='str')
         return mdstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<C-Section Formed>'

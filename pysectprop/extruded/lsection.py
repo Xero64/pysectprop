@@ -8,6 +8,7 @@ class LSection(GeneralSection):
     wf: float = None
     tf: float = None
     rc: float = None
+
     def __init__(self, hw: float, tw: float, wf: float, tf: float,
                  rc: float=0.0, label: str=None) -> None:
         self.hw = hw
@@ -19,6 +20,7 @@ class LSection(GeneralSection):
         z = [0.0, 0.0, self.tf, self.tf, self.hw, self.hw]
         r = [0.0, 0.0, 0.0, self.rc, 0.0, 0.0]
         super().__init__(y, z, r, label=label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('L-Section')
         table = MDTable()
@@ -35,6 +37,7 @@ class LSection(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('L-Section')
         table = MDTable()
@@ -43,9 +46,10 @@ class LSection(GeneralSection):
         table.add_column(f'w_f ({config.lunit:s})', config.l1frm, data=[self.wf])
         table.add_column(f't_f ({config.lunit:s})', config.l1frm, data=[self.tf])
         table.add_column(f'r_c ({config.lunit:s})', config.l1frm, data=[self.rc])
-        outstr += str(table)
+        outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<L-Section>'

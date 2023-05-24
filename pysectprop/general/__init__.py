@@ -1,3 +1,4 @@
+from .numericalsection import NumericalSection as NumericalSection
 from .generalsection import GeneralSection as GeneralSection
 from .materialsection import MaterialSection as MaterialSection
 from .compositesection import CompositeSection as CompositeSection

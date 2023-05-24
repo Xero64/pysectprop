@@ -22,6 +22,7 @@ class CripplingSection(ThinWalledSection):
     _EIyz: float = None
     _EIyp: float = None
     _EIzp: float = None
+
     def __init__(self, section: ThinWalledSection, material: 'Material',
                  coef: float, cnef: float) -> None:
         if isinstance(section, ThinWalledSection):
@@ -31,61 +32,73 @@ class CripplingSection(ThinWalledSection):
         self.material = material
         self.coef = coef
         self.cnef = cnef
+
     @property
     def EA(self) -> float:
         if self._EA is None:
             self._EA = self.material.Ec*self.A
         return self._EA
+
     @property
     def EAy(self) -> float:
         if self._EAy is None:
             self._EAy = self.material.Ec*self.Ay
         return self._EAy
+
     @property
     def EAz(self) -> float:
         if self._EAz is None:
             self._EAz = self.material.Ec*self.Az
         return self._EAz
+
     @property
     def EAyy(self) -> float:
         if self._EAyy is None:
             self._EAyy = self.material.Ec*self.Ayy
         return self._EAyy
+
     @property
     def EAzz(self) -> float:
         if self._EAzz is None:
             self._EAzz = self.material.Ec*self.Azz
         return self._EAzz
+
     @property
     def EAyz(self) -> float:
         if self._EAyz is None:
             self._EAyz = self.material.Ec*self.Ayz
         return self._EAyz
+
     @property
     def EIyy(self) -> float:
         if self._EIyy is None:
             self._EIyy = self.material.Ec*self.Iyy
         return self._EIyy
+
     @property
     def EIzz(self) -> float:
         if self._EIzz is None:
             self._EIzz = self.material.Ec*self.Izz
         return self._EIzz
+
     @property
     def EIyz(self) -> float:
         if self._EIyz is None:
             self._EIyz = self.material.Ec*self.Iyz
         return self._EIyz
+
     @property
     def EIyp(self) -> float:
         if self._EIyp is None:
             self._EIyp = self.material.Ec*self.Iyp
         return self._EIyp
+
     @property
     def EIzp(self) -> float:
         if self._EIzp is None:
             self._EIzp = self.material.Ec*self.Izp
         return self._EIzp
+
     def _repr_markdown_(self) -> str:
         funit = config.funit
         lunit = config.lunit
@@ -159,6 +172,7 @@ class CripplingSection(ThinWalledSection):
         table.add_row(['Total', '-', '-', '-', Acc_tot, Fcc_tot, Pcc_tot])
         mdstr += table._repr_markdown_()
         return mdstr
+
     def __str__(self) -> str:
         funit = config.funit
         lunit = config.lunit
@@ -184,7 +198,7 @@ class CripplingSection(ThinWalledSection):
         table.add_column(f'EAyy ({eiunit:s})', l4frm, data=[self.EAyy])
         table.add_column(f'EAzz ({eiunit:s})', l4frm, data=[self.EAzz])
         table.add_column(f'EAyz ({eiunit:s})', l4frm, data=[self.EAyz])
-        outstr += str(table)
+        outstr += table.__str__()
         table = MDTable()
         table.add_column(f'EI_yy ({eiunit:s})', l4frm, data=[self.EIyy])
         table.add_column(f'EI_zz ({eiunit:s})', l4frm, data=[self.EIzz])
@@ -193,7 +207,7 @@ class CripplingSection(ThinWalledSection):
                          data=[degrees(self.thp)])
         table.add_column(f'EI_yp ({eiunit:s})', l4frm, data=[self.EIyp])
         table.add_column(f'EI_zp ({eiunit:s})', l4frm, data=[self.EIzp])
-        outstr += str(table)
+        outstr += table.__str__()
         Ec = self.material.Ec
         Fcy = self.material.Fcy
         table = MDTable()
@@ -201,7 +215,7 @@ class CripplingSection(ThinWalledSection):
         table.add_column(f'F_cy ({sunit:s})', '.0f', data=[self.material.Fcy])
         table.add_column('C_oef', '.3f', data=[self.coef])
         table.add_column('C_nef', '.3f', data=[self.cnef])
-        outstr += str(table)
+        outstr += table.__str__()
         table = MDTable()
         table.add_column('#', '')
         table.add_column(f'b ({lunit:s})', '')
@@ -230,8 +244,9 @@ class CripplingSection(ThinWalledSection):
             table.add_row(data)
         Fcc_tot = Pcc_tot/Acc_tot
         table.add_row(['Total', '', '', '', Acc_tot, Fcc_tot, Pcc_tot])
-        outstr += str(table)
+        outstr += table.__str__()
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<CripplingSection>'

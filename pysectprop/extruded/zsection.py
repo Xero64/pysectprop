@@ -12,6 +12,7 @@ class ZSection(GeneralSection):
     tuf: float = None
     rlf: float = None
     ruf: float = None
+
     def __init__(self, hw: float, tw: float, wlf: float, tlf: float,
                  wuf: float, tuf: float, ruf: float=0.0, rlf: float=0.0,
                  label: str=None) -> None:
@@ -29,11 +30,13 @@ class ZSection(GeneralSection):
              self.hw, self.hw - self.tuf, self.hw - self.tuf]
         r = [0.0, 0.0, 0.0, self.ruf, 0.0, 0.0, 0.0, self.rlf]
         super().__init__(y, z, r, label=label)
+
     def to_thin_walled_section(self) -> ThinWalledSection:
         y = [self.wlf, self.tw/2, self.tw/2, self.tw/2-self.wuf]
         z = [self.tlf/2, self.tlf/2, self.hw-self.tuf/2, self.hw-self.tuf/2]
         t = [self.tlf, self.tw, self.tuf]
         return ThinWalledSection(y, z, t, label=self.label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Z-Section')
         table = MDTable()
@@ -56,6 +59,7 @@ class ZSection(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Z-Section')
         table = MDTable()
@@ -67,9 +71,10 @@ class ZSection(GeneralSection):
         table.add_column(f't_lf ({config.lunit:s})', config.l1frm, data=[self.tuf])
         table.add_column(f'r_uf ({config.lunit:s})', config.l1frm, data=[self.ruf])
         table.add_column(f'r_lf ({config.lunit:s})', config.l1frm, data=[self.rlf])
-        outstr += str(table)
+        outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<Z-Section>'

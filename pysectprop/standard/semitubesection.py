@@ -5,6 +5,7 @@ from .. import config
 class SemiTubeSection(GeneralSection):
     do: float = None
     di: float = None
+
     def __init__(self, do: float, di: float, label: str=None):
         self.do = do
         self.di = di
@@ -14,6 +15,7 @@ class SemiTubeSection(GeneralSection):
         z = [0.0, ro, ro, 0.0, 0.0, ri, ri, 0.0]
         r = [0.0, ro, ro, 0.0, 0.0, ri, ri, 0.0]
         super().__init__(y, z, r, label=label)
+
     def _repr_markdown_(self) -> str:
         mdstr = self.section_heading('Semi-Tube-Section')
         table = MDTable()
@@ -24,6 +26,7 @@ class SemiTubeSection(GeneralSection):
         mdstr += table._repr_markdown_()
         mdstr += self.section_properties(outtype='md')
         return mdstr
+
     def __str__(self) -> str:
         outstr = self.section_heading('Semi-Tube-Section')
         table = MDTable()
@@ -34,6 +37,7 @@ class SemiTubeSection(GeneralSection):
         outstr += table.__str__()
         outstr += self.section_properties(outtype='str')
         return outstr
+
     def __repr__(self):
         if self.label is None:
             outstr = '<Semi-Tube-Section>'
