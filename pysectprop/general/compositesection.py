@@ -1,4 +1,4 @@
-from math import atan, degrees, pi, sqrt
+from math import atan2, degrees, sqrt
 from typing import TYPE_CHECKING, List
 
 from matplotlib.collections import PatchCollection
@@ -32,16 +32,21 @@ class CompositeSection():
     _EIav: float = None
     _EIdf: float = None
     _EIsq: float = None
+    _cos2thp: float = None
+    _sin2thp: float = None
     _thp: float = None
     _EIyp: float = None
     _EIzp: float = None
+    
     def __init__(self, sections: List['MaterialSection'], label: str=None) -> None:
         self.sections = sections
         self.label = label
+        
     def reset(self) -> None:
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
+                
     @property
     def EA(self) -> float:
         if self._EA is None:
@@ -49,6 +54,7 @@ class CompositeSection():
             for section in self.sections:
                 self._EA += section.EA
         return self._EA
+    
     @property
     def EAy(self) -> float:
         if self._EAy is None:
@@ -56,6 +62,7 @@ class CompositeSection():
             for section in self.sections:
                 self._EAy += section.EAy
         return self._EAy
+    
     @property
     def EAz(self) -> float:
         if self._EAz is None:
@@ -63,16 +70,19 @@ class CompositeSection():
             for section in self.sections:
                 self._EAz += section.EAz
         return self._EAz
+    
     @property
     def cy(self) -> float:
         if self._cy is None:
             self._cy = self.EAy/self.EA
         return self._cy
+    
     @property
     def cz(self) -> float:
         if self._cz is None:
             self._cz = self.EAz/self.EA
         return self._cz
+    
     @property
     def EAyy(self) -> float:
         if self._EAyy is None:
@@ -80,6 +90,7 @@ class CompositeSection():
             for section in self.sections:
                 self._EAyy += section.EAyy
         return self._EAyy
+    
     @property
     def EAzz(self) -> float:
         if self._EAzz is None:
@@ -87,6 +98,7 @@ class CompositeSection():
             for section in self.sections:
                 self._EAzz += section.EAzz
         return self._EAzz
+    
     @property
     def EAyz(self) -> float:
         if self._EAyz is None:
@@ -94,57 +106,84 @@ class CompositeSection():
             for section in self.sections:
                 self._EAyz += section.EAyz
         return self._EAyz
+    
     @property
     def EIyy(self) -> float:
         if self._EIyy is None:
             self._EIyy = self.EAzz-self.EA*self.cz**2
         return self._EIyy
+    
     @property
     def EIzz(self) -> float:
         if self._EIzz is None:
             self._EIzz = self.EAyy-self.EA*self.cy**2
         return self._EIzz
+    
     @property
     def EIyz(self) -> float:
         if self._EIyz is None:
             self._EIyz = self.EAyz-self.EA*self.cy*self.cz
         return self._EIyz
+    
     @property
     def EIav(self) -> float:
         if self._EIav is None:
-            self._EIav = (self.EIzz + self.EIyy)/2
+            self._EIav = (self.EIyy + self.EIzz)/2
         return self._EIav
+    
     @property
     def EIdf(self) -> float:
         if self._EIdf is None:
-            self._EIdf = (self.EIzz - self.EIyy)/2
+            self._EIdf = (self.EIyy - self.EIzz)/2
         return self._EIdf
+    
     @property
     def EIsq(self) -> float:
         if self._EIsq is None:
             self._EIsq = sqrt(self.EIdf**2 + self.EIyz**2)
         return self._EIsq
+    
+    @property
+    def cos2thp(self) -> float:
+        if self._cos2thp is None:
+            self._cos2thp = self.EIdf/self.EIsq
+            if abs(self._cos2thp) < 1e-12:
+                self._cos2thp = 0.0
+        return self._cos2thp
+    
+    @property
+    def sin2thp(self) -> float:
+        if self._sin2thp is None:
+            self._sin2thp = -self.EIyz/self.EIsq
+            if abs(self._sin2thp) < 1e-12:
+                self._sin2thp = 0.0
+        return self._sin2thp
+
     @property
     def thp(self) -> float:
         if self._thp is None:
-            tol = 1e-12
-            if abs(self.EIyz)/self.EIav < tol:
+            if self.sin2thp == 0.0:
                 self._thp = 0.0
-            elif abs(self.EIdf)/self.EIav < tol:
-                self._thp = pi/4
             else:
-                self._thp = atan(self.EIyz/self.EIdf)/2
+                self._thp = 0.5*atan2(self.sin2thp, self.cos2thp)
         return self._thp
+
     @property
     def EIyp(self) -> float:
         if self._EIyp is None:
-            self._EIyp = self.EIav + self.EIsq
+            cos2thp = self.EIdf/self.EIsq
+            sin2thp = -self.EIyz/self.EIsq
+            self._EIyp = self.EIav + self.EIdf*cos2thp - self.EIyz*sin2thp
         return self._EIyp
+
     @property
     def EIzp(self) -> float:
         if self._EIzp is None:
-            self._EIzp = self.EIav - self.EIsq
+            cos2thp = self.EIdf/self.EIsq
+            sin2thp = -self.EIyz/self.EIsq
+            self._EIzp = self.EIav - self.EIdf*cos2thp + self.EIyz*sin2thp
         return self._EIzp
+    
     def plot(self, ax=None, legloc: str='best'):
         if ax is None:
             fig = figure(figsize=(12, 8))
@@ -180,6 +219,7 @@ class CompositeSection():
         ax.set_ylim(min(z), max(z))
         ax.legend(handles=legel, loc=legloc)
         return ax
+    
     def apply_load(self, loadcase, Fx, My, Mz, limit: bool=False):
         sectresults = []
         for section in self.sections:
@@ -187,6 +227,7 @@ class CompositeSection():
             sectresult.set_load(loadcase, Fx, My, Mz, limit=limit)
             sectresults.append(sectresult)
         return sectresults
+    
     def _repr_markdown_(self) -> str:
         funit = config.funit
         lunit = config.lunit
@@ -222,6 +263,7 @@ class CompositeSection():
         table.add_column(f'EI<sub>zp</sub> ({eiunit:s})', l4frm, data=[self.EIzp])
         mdstr += table._repr_markdown_()
         return mdstr
+    
     def __str__(self) -> str:
         funit = config.funit
         lunit = config.lunit
@@ -256,6 +298,7 @@ class CompositeSection():
         table.add_column(f'EI_zp ({eiunit:s})', l4frm, data=[self.EIzp])
         mdstr += table.__str__()
         return mdstr
+    
     def __repr__(self) -> str:
         if self.label is None:
             outstr = '<CompositeSection>'

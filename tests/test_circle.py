@@ -42,6 +42,10 @@ def test_second_moment_of_area_about_zz():
 def test_second_moment_of_area_about_yz():
     assert isclose(circle.Ayz, circle.A*yt*zt, abs_tol=1e-12)
 
+print(f'circle.cos2thp = {circle.cos2thp}')
+print(f'circle.sin2thp = {circle.sin2thp}')
+print(f'circle.thp = {circle.thp}')
+
 def test_principal_angle():
     assert isclose(circle.thp, 0.0, abs_tol=1e-12)
 

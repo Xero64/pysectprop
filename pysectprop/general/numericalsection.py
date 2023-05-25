@@ -1,8 +1,9 @@
-from math import atan, degrees, pi, sqrt
+from math import atan2, degrees, sqrt
 
 from py2md.classes import MDHeading, MDTable
 
 from .. import config
+
 
 class NumericalSection():
     label: str = None
@@ -20,6 +21,8 @@ class NumericalSection():
     _Iav: float = None
     _Idf: float = None
     _Isq: float = None
+    _cos2thp: float = None
+    _sin2thp: float = None
     _thp: float = None
     _Iyp: float = None
     _Izp: float = None
@@ -106,13 +109,13 @@ class NumericalSection():
     @property
     def Iav(self) -> float:
         if self._Iav is None:
-            self._Iav = (self.Izz + self.Iyy)/2
+            self._Iav = (self.Iyy + self.Izz)/2
         return self._Iav
 
     @property
     def Idf(self) -> float:
         if self._Idf is None:
-            self._Idf = (self.Izz - self.Iyy)/2
+            self._Idf = (self.Iyy - self.Izz)/2
         return self._Idf
 
     @property
@@ -120,29 +123,39 @@ class NumericalSection():
         if self._Isq is None:
             self._Isq = sqrt(self.Idf**2 + self.Iyz**2)
         return self._Isq
+    
+    @property
+    def cos2thp(self) -> float:
+        if self._cos2thp is None:
+            self._cos2thp = self.Idf/self.Isq
+            if abs(self.Idf/self.Iav) < 1e-12:
+                self._cos2thp = 0.0
+        return self._cos2thp
+    
+    @property
+    def sin2thp(self) -> float:
+        if self._sin2thp is None:
+            self._sin2thp = -self.Iyz/self.Isq
+            if abs(self.Iyz/self.Iav) < 1e-12:
+                self._sin2thp = 0.0
+        return self._sin2thp
 
     @property
     def thp(self) -> float:
         if self._thp is None:
-            tol = 1e-12
-            if abs(self.Iyz)/self.Iav < tol:
-                self._thp = 0.0
-            elif abs(self.Idf)/self.Iav < tol:
-                self._thp = pi/4
-            else:
-                self._thp = atan(self.Iyz/self.Idf)/2
+            self._thp = 0.5*atan2(self.sin2thp, self.cos2thp)
         return self._thp
 
     @property
     def Iyp(self) -> float:
         if self._Iyp is None:
-            self._Iyp = self.Iav + self.Isq
+            self._Iyp = self.Iav + self.Idf*self.cos2thp - self.Iyz*self.sin2thp
         return self._Iyp
 
     @property
     def Izp(self) -> float:
         if self._Izp is None:
-            self._Izp = self.Iav - self.Isq
+            self._Izp = self.Iav - self.Idf*self.cos2thp + self.Iyz*self.sin2thp
         return self._Izp
 
     def section_heading(self, head: str):
