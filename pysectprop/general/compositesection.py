@@ -147,7 +147,7 @@ class CompositeSection():
     def cos2thp(self) -> float:
         if self._cos2thp is None:
             self._cos2thp = self.EIdf/self.EIsq
-            if abs(self._cos2thp) < 1e-12:
+            if abs(self.EIdf/self.EIav) < 1e-12:
                 self._cos2thp = 0.0
         return self._cos2thp
     
@@ -155,33 +155,26 @@ class CompositeSection():
     def sin2thp(self) -> float:
         if self._sin2thp is None:
             self._sin2thp = -self.EIyz/self.EIsq
-            if abs(self._sin2thp) < 1e-12:
+            if abs(self.EIyz/self.EIav) < 1e-12:
                 self._sin2thp = 0.0
         return self._sin2thp
 
     @property
     def thp(self) -> float:
         if self._thp is None:
-            if self.sin2thp == 0.0:
-                self._thp = 0.0
-            else:
-                self._thp = 0.5*atan2(self.sin2thp, self.cos2thp)
+            self._thp = 0.5*atan2(self.sin2thp, self.cos2thp)
         return self._thp
 
     @property
     def EIyp(self) -> float:
         if self._EIyp is None:
-            cos2thp = self.EIdf/self.EIsq
-            sin2thp = -self.EIyz/self.EIsq
-            self._EIyp = self.EIav + self.EIdf*cos2thp - self.EIyz*sin2thp
+            self._EIyp = self.EIav + self.EIdf*self.cos2thp - self.EIyz*self.sin2thp
         return self._EIyp
 
     @property
     def EIzp(self) -> float:
         if self._EIzp is None:
-            cos2thp = self.EIdf/self.EIsq
-            sin2thp = -self.EIyz/self.EIsq
-            self._EIzp = self.EIav - self.EIdf*cos2thp + self.EIyz*sin2thp
+            self._EIzp = self.EIav - self.EIdf*self.cos2thp + self.EIyz*self.sin2thp
         return self._EIzp
     
     def plot(self, ax=None, legloc: str='best'):
