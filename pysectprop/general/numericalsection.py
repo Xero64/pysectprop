@@ -123,19 +123,25 @@ class NumericalSection():
         if self._Isq is None:
             self._Isq = sqrt(self.Idf**2 + self.Iyz**2)
         return self._Isq
-    
+
     @property
     def cos2thp(self) -> float:
         if self._cos2thp is None:
-            self._cos2thp = self.Idf/self.Isq
+            if self.Isq == 0.0:
+                self._cos2thp = 1.0
+            else:
+                self._cos2thp = self.Idf/self.Isq
             if abs(self.Idf/self.Iav) < 1e-12:
                 self._cos2thp = 0.0
         return self._cos2thp
-    
+
     @property
     def sin2thp(self) -> float:
         if self._sin2thp is None:
-            self._sin2thp = -self.Iyz/self.Isq
+            if self.Isq == 0.0:
+                self._sin2thp = 0.0
+            else:
+                self._sin2thp = -self.Iyz/self.Isq
             if abs(self.Iyz/self.Iav) < 1e-12:
                 self._sin2thp = 0.0
         return self._sin2thp

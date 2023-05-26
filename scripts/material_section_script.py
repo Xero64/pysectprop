@@ -12,7 +12,7 @@ display_markdown(lsect)
 
 #%%
 # Create Material
-alum = Material(71000.0, label='Aluminium')
+alum = Material(1.0, label='Aluminium')
 alum.set_yield_strengths(280.0, 260.0)
 alum.set_ultimate_strengths(400.0, 380.0)
 display_markdown(alum)
@@ -20,5 +20,24 @@ display_markdown(alum)
 #%%
 # Create Material Section
 msect = MaterialSection(lsect, alum)
+display_markdown(msect)
+ax = msect.plot()
+
+#%%
+# Translate Section
+yt = 300.0
+zt = 450.0
+
+lsect.translate(yt, zt)
+display_markdown(lsect)
+ax = lsect.plot()
+
+msect.translate(yt, zt)
+display_markdown(msect)
+ax = msect.plot()
+
+#%%
+# Translate Section
+msect.translate(-msect.cy, -msect.cz)
 display_markdown(msect)
 ax = msect.plot()

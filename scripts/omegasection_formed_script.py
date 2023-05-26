@@ -32,6 +32,15 @@ display_markdown(omsect)
 ax = omsect.plot()
 
 #%%
+# Translate
+yt = 300.0
+zt = 450.0
+omsect.translate(yt, zt)
+
+display_markdown(omsect)
+ax = omsect.plot()
+
+#%%
 # Thin-Walled Section
 twsect = omsect.to_thin_walled_section()
 

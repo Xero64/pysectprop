@@ -5,10 +5,26 @@ from pysectprop.extruded import LSection
 
 #%%
 # Create Section
-lsect = LSection(17.6, 1.6, 13.4, 1.4, rc=0.8)
-display_markdown(lsect)
-ax = lsect.plot()
+lsect1 = LSection(17.6, 1.6, 13.6, 1.6, 3.0)
+display_markdown(lsect1)
+ax = lsect1.plot()
+
+display_markdown(lsect1.build_up_table)
 
 #%%
-# Print to Standard Output
-print(lsect)
+# Create Section
+lsect2 = LSection(lsect1.hw, lsect1.tw, lsect1.wf,
+                  lsect1.tf, lsect1.rc)
+
+yt = 300.0
+zt = 450.0
+
+lsect2.translate(yt, zt)
+display_markdown(lsect2)
+ax = lsect2.plot()
+
+display_markdown(lsect2.build_up_table)
+
+#%%
+# Arc
+# arc1

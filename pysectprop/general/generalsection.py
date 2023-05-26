@@ -117,9 +117,9 @@ class GeneralSection(NumericalSection):
         self.check_area(display=False)
 
     def translate(self, yt: float, zt: float) -> None:
-        y = [-yi+yt for yi in self.y]
+        y = [yi + yt for yi in self.y]
         self.y = y
-        z = [-zi+zt for zi in self.z]
+        z = [zi + zt for zi in self.z]
         self.z = z
         self.reset()
         self.generate_path()
@@ -214,9 +214,11 @@ class GeneralSection(NumericalSection):
                 ax.plot(y, z)
         return ax
 
-    def build_up_table(self):
+    @property
+    def build_up_table(self) -> MDTable:
         table = MDTable()
-        table.add_column('Item', '')
+        table.add_column('Item', 's')
+        table.add_column('Type', 's')
         table.add_column('A', config.l2frm)
         table.add_column('Ay', config.l3frm)
         table.add_column('Az', config.l3frm)
@@ -224,8 +226,10 @@ class GeneralSection(NumericalSection):
         table.add_column('Azz', config.l4frm)
         table.add_column('Ayz', config.l4frm)
         for i, obj in enumerate(self.path):
-            table.add_row([i+1, obj.A, obj.Ay, obj.Az, obj.Ayy, obj.Azz, obj.Ayz])
-        table.add_row(['Total', self.A, self.Ay, self.Az, self.Ayy, self.Azz, self.Ayz])
+            table.add_row([str(i+1), type(obj).__name__, obj.A, obj.Ay, obj.Az,
+                           obj.Ayy, obj.Azz, obj.Ayz])
+        table.add_row(['Total', '', self.A, self.Ay, self.Az,
+                       self.Ayy, self.Azz, self.Ayz])
         return table
 
     def _repr_markdown_(self) -> str:

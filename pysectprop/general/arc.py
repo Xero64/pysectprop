@@ -2,6 +2,7 @@ from typing import List, Tuple, Optional
 from math import atan2, sqrt
 from py2md.classes import MDTable
 from .point import Point
+from .line import Line
 from .. import config
 
 K = 1.0 - 4.0*(2.0**0.5 - 1.0)/3.0
@@ -20,6 +21,7 @@ class Arc():
     radius: float = None
     sinphi: float = None
     cosphi: float = None
+    _line: Line = None
     _A: float = None
     _Ay: float = None
     _Az: float = None
@@ -81,6 +83,12 @@ class Arc():
         self.cosphi = ycf/lcf
 
     @property
+    def line(self) -> Line:
+        if self._line is None:
+            self._line = Line(self.pnta, self.pntb)
+        return self._line
+
+    @property
     def A_seg(self) -> float:
         if self._A_seg is None:
             rad = self.radius
@@ -89,20 +97,22 @@ class Arc():
             self._A_seg = rad**2/2*(ang-sinang)
         return self._A_seg
 
-    @property
-    def A_line(self) -> float:
-        if self._A_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._A_line = (ya*zb-za*yb)/2
-        return self._A_line
+    # @property
+    # def A_line(self) -> float:
+    #     if self._A_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._A_line = (ya*zb - za*yb)/2
+    #         print(f'self._A_line = {self._A_line}')
+    #         print(f'self.line.A = {self.line.A}')
+    #     return self._A_line
 
     @property
     def A(self) -> float:
         if self._A is None:
-            self._A = self.A_seg + self.A_line
+            self._A = self.A_seg + self.line.A
         return self._A
 
     @property
@@ -115,20 +125,22 @@ class Arc():
             self._Ay_seg = 2/3*rad**3*sango2**3*cosphi+self.A_seg*yf
         return self._Ay_seg
 
-    @property
-    def Ay_line(self) -> float:
-        if self._Ay_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._Ay_line = (ya*zb-za*yb)*(ya+yb)/6
-        return self._Ay_line
+    # @property
+    # def Ay_line(self) -> float:
+    #     if self._Ay_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._Ay_line = (ya*zb - za*yb)*(ya + yb)/6
+    #         print(f'self._Ay_line = {self._Ay_line}')
+    #         print(f'self.line.Ay = {self.line.Ay}')
+    #     return self._Ay_line
 
     @property
     def Ay(self) -> float:
         if self._Ay is None:
-            self._Ay = self.Ay_seg+self.Ay_line
+            self._Ay = self.Ay_seg + self.line.Ay
         return self._Ay
 
     @property
@@ -138,23 +150,25 @@ class Arc():
             rad = self.radius
             sango2 = self.sango2
             sinphi = self.sinphi
-            self._Az_seg = 2/3*rad**3*sango2**3*sinphi+self._A_seg*zf
+            self._Az_seg = 2/3*rad**3*sango2**3*sinphi + self._A_seg*zf
         return self._Az_seg
 
-    @property
-    def Az_line(self) -> float:
-        if self._Az_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._Az_line = (ya*zb-za*yb)*(za+zb)/6
-        return self._Az_line
+    # @property
+    # def Az_line(self) -> float:
+    #     if self._Az_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._Az_line = (ya*zb - za*yb)*(za + zb)/6
+    #         print(f'self._Az_line = {self._Az_line}')
+    #         print(f'self.line.Az = {self.line.Az}')
+    #     return self._Az_line
 
     @property
     def Az(self) -> float:
         if self._Az is None:
-            self._Az = self.Az_seg+self.Az_line
+            self._Az = self.Az_seg + self.line.Az
         return self._Az
 
     @property
@@ -167,25 +181,27 @@ class Arc():
             sinang = self.sinang
             sinphi = self.sinphi
             cosphi = self.cosphi
-            Ayy = rad**4/8*(ang-sinang+2*sinang*sango2**2)
-            Azz = rad**4/8*(ang-sinang-2*sinang*sango2**2/3)
-            self._Ayy_seg = Ayy*cosphi**2+Azz*sinphi**2+self.A_seg*yf**2
+            Ayy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
+            Azz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
+            self._Ayy_seg = Ayy*cosphi**2 + Azz*sinphi**2 + self.A_seg*yf**2
         return self._Ayy_seg
 
-    @property
-    def Ayy_line(self) -> float:
-        if self._Ayy_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._Ayy_line = (ya**2+ya*yb+yb**2)*(ya*zb-yb*za)/12
-        return self._Ayy_line
+    # @property
+    # def Ayy_line(self) -> float:
+    #     if self._Ayy_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._Ayy_line = (ya**2 + ya*yb + yb**2)*(ya*zb - yb*za)/12
+    #         print(f'self._Ayy_line = {self._Ayy_line}')
+    #         print(f'self.line.Ayy = {self.line.Ayy}')
+    #     return self._Ayy_line
 
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
-            self._Ayy = self.Ayy_seg+self.Ayy_line
+            self._Ayy = self.Ayy_seg + self.line.Ayy
         return self._Ayy
 
     @property
@@ -198,25 +214,27 @@ class Arc():
             sinang = self.sinang
             sinphi = self.sinphi
             cosphi = self.cosphi
-            Ayy = rad**4/8*(ang-sinang+2*sinang*sango2**2)
-            Azz = rad**4/8*(ang-sinang-2*sinang*sango2**2/3)
-            self._Azz_seg = Azz*cosphi**2+Ayy*sinphi**2+self.A_seg*zf**2
+            Ayy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
+            Azz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
+            self._Azz_seg = Azz*cosphi**2 + Ayy*sinphi**2 + self.A_seg*zf**2
         return self._Azz_seg
 
-    @property
-    def Azz_line(self) -> float:
-        if self._Azz_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._Azz_line = (za**2+za*zb+zb**2)*(ya*zb-yb*za)/12
-        return self._Azz_line
+    # @property
+    # def Azz_line(self) -> float:
+    #     if self._Azz_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._Azz_line = (za**2 + za*zb + zb**2)*(ya*zb - yb*za)/12
+    #         print(f'self._Azz_line = {self._Azz_line}')
+    #         print(f'self.line.Azz = {self.line.Azz}')
+    #     return self._Azz_line
 
     @property
     def Azz(self) -> float:
         if self._Azz is None:
-            self._Azz = self.Azz_seg+self.Azz_line
+            self._Azz = self.Azz_seg + self.line.Azz
         return self._Azz
 
     @property
@@ -231,25 +249,27 @@ class Arc():
             sinphi = self.sinphi
             cosphi = self.cosphi
             A_seg = rad**2/2*(ang-sinang)
-            tempAyy = rad**4/8*(ang-sinang+2*sinang*sango2**2)
-            tempAzz = rad**4/8*(ang-sinang-2*sinang*sango2**2/3)
-            self._Ayz_seg = (tempAyy-tempAzz)*sinphi*cosphi+A_seg*yf*zf
+            tempAyy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
+            tempAzz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
+            self._Ayz_seg = (tempAyy - tempAzz)*sinphi*cosphi + A_seg*yf*zf
         return self._Ayz_seg
 
-    @property
-    def Ayz_line(self) -> float:
-        if self._Ayz_line is None:
-            ya = self.pnta.y
-            za = self.pnta.z
-            yb = self.pntb.y
-            zb = self.pntb.z
-            self._Ayz_line = (ya*zb+2*ya*za+2*yb*zb+yb*za)*(ya*zb-yb*za)/24
-        return self._Ayz_line
+    # @property
+    # def Ayz_line(self) -> float:
+    #     if self._Ayz_line is None:
+    #         ya = self.pnta.y
+    #         za = self.pnta.z
+    #         yb = self.pntb.y
+    #         zb = self.pntb.z
+    #         self._Ayz_line = (ya*zb + 2*ya*za + 2*yb*zb + yb*za)*(ya*zb - yb*za)/24
+    #         print(f'self._Ayz_line = {self._Ayz_line}')
+    #         print(f'self.line.Ayz = {self.line.Ayz}')
+    #     return self._Ayz_line
 
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
-            self._Ayz = self.Ayz_seg + self.Ayz_line
+            self._Ayz = self.Ayz_seg + self.line.Ayz
         return self._Ayz
 
     def add_path(self, verts: Optional[List[Tuple[float, float]]]=None,
