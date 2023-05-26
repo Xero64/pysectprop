@@ -125,8 +125,8 @@ class GeneralSection(NumericalSection):
         self.generate_path()
         self.check_area(display=False)
 
-    def rotate(self, θr: float) -> None:
-        thrad = radians(θr)
+    def rotate(self, theta: float) -> None:
+        thrad = radians(theta)
         costh = cos(thrad)
         sinth = sin(thrad)
         y = [yi*costh - zi*sinth for yi, zi in zip(self.y, self.z)]

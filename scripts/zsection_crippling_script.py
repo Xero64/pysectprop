@@ -30,6 +30,12 @@ display_markdown(twsect)
 ax = twsect.plot()
 
 #%%
+# Rotate Section
+twsect.rotate(40.0)
+display_markdown(twsect)
+ax = twsect.plot()
+
+#%%
 # Create Crippling Section
 crsect = CripplingSection(twsect, alum, 0.32, 0.36)
 display_markdown(crsect)

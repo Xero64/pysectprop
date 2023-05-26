@@ -1,5 +1,6 @@
 #%%
 # Import Dependencies
+from math import degrees
 from IPython.display import display_markdown
 from pysectprop.extruded import LSection
 
@@ -26,5 +27,7 @@ ax = lsect2.plot()
 display_markdown(lsect2.build_up_table)
 
 #%%
-# Arc
-# arc1
+# Rotate Section
+lsect1.rotate(degrees(-lsect1.thp))
+display_markdown(lsect1)
+ax = lsect1.plot()

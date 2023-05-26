@@ -60,7 +60,7 @@ class Mould(CompositeSection):
                     pntb = Point(self.y[i], self.z[i])
                     pntc = Point(self.y[i+1], self.z[i+1])
                     arc = arc_from_points(pnta, pntb, pntc, 1.0)
-                    if arc.sango2 < 0.0:
+                    if arc.sector.theta < 0.0:
                         sgn = -1.0
                     else:
                         sgn = 1.0

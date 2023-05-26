@@ -46,6 +46,26 @@ class CompositeSection():
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
+                
+    def mirror_y(self) -> None:
+        for section in self.sections:
+            section.mirror_y()
+        self.reset()
+        
+    def mirror_z(self) -> None:
+        for section in self.sections:
+            section.mirror_z()
+        self.reset()
+
+    def translate(self, yt: float, zt: float) -> None:
+        for section in self.sections:
+            section.translate(yt, zt)
+        self.reset()
+
+    def rotate(self, theta: float) -> None:
+        for section in self.sections:
+            section.rotate(theta)
+        self.reset()
 
     @property
     def EA(self) -> float:

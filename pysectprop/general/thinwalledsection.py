@@ -100,6 +100,18 @@ class ThinWalledSection(NumericalSection):
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
+    
+    def rotate(self, theta: float) -> None:
+        thrad = radians(theta)
+        costh = cos(thrad)
+        sinth = sin(thrad)
+        y = [yi*costh - zi*sinth for yi, zi in zip(self.y, self.z)]
+        z = [zi*costh + yi*sinth for yi, zi in zip(self.y, self.z)]
+        self.y = y
+        self.z = z
+        self.reset()
+        self.generate_segments()
+        self.check_area(display=False)
 
     @property
     def A(self) -> float:
