@@ -38,7 +38,7 @@ class NumericalSection():
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
-        self.check_area(display=False)
+        self.check_area()
 
     @property
     def A(self) -> float:

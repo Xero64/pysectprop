@@ -15,14 +15,6 @@ class Arc():
     pntf: Point = None
     _pntd: Point = None
     _pnte: Point = None
-    # sinang: float = None
-    # cosang: float = None
-    # ang: float = None
-    # sango2: float = None
-    # radius: float = None
-    # sinphi: float = None
-    # cosphi: float = None
-    # _line: Line = None
     _lineaf: Line = None
     _linefb: Line = None
     _sector: Sector = None
@@ -32,25 +24,12 @@ class Arc():
     _Ayy: float = None
     _Azz: float = None
     _Ayz: float = None
-    # _A_seg: float = None
-    # _Ay_seg: float = None
-    # _Az_seg: float = None
-    # _Ayy_seg: float = None
-    # _Azz_seg: float = None
-    # _Ayz_seg: float = None
-    # _A_line: float = None
-    # _Ay_line: float = None
-    # _Az_line: float = None
-    # _Ayy_line: float = None
-    # _Azz_line: float = None
-    # _Ayz_line: float = None
 
     def __init__(self, pnta: Point, pntb: Point, pntc: Point, pntf: Point) -> None:
         self.pnta = pnta
         self.pntb = pntb
         self.pntc = pntc
         self.pntf = pntf
-        # self.update()
 
     @property
     def pntd(self) -> Point:
@@ -71,46 +50,6 @@ class Arc():
             ze = self.pntc.z + dz2*K
             self._pnte = Point(ye, ze)
         return self._pnte
-
-    # def update(self) -> None:
-    #     # dy = self.pntb.y - self.pnta.y
-    #     # dz = self.pntb.z - self.pnta.z
-    #     # length = sqrt(dy**2 + dz**2)
-    #     dy1 = self.pnta.y - self.pntc.y
-    #     dz1 = self.pnta.z - self.pntc.z
-    #     dy2 = self.pntb.y - self.pntc.y
-    #     dz2 = self.pntb.z - self.pntc.z
-    #     yd = self.pntc.y + dy1*K
-    #     zd = self.pntc.z + dz1*K
-    #     ye = self.pntc.y + dy2*K
-    #     ze = self.pntc.z + dz2*K
-    #     self.pntd = Point(yd, zd)
-    #     self.pnte = Point(ye, ze)
-    # #     l1 = sqrt(dy1**2 + dz1**2)
-    # #     dy3 = self.pnta.y - self.pntf.y
-    # #     dz3 = self.pnta.z - self.pntf.z
-    # #     dy4 = self.pntb.y - self.pntf.y
-    # #     dz4 = self.pntb.z - self.pntf.z
-    # #     l3 = sqrt(dy3**2 + dz3**2)
-    # #     l4 = sqrt(dy4**2 + dz4**2)
-    # #     self.sinang = (dy3*dz4 - dz3*dy4)/l3/l4
-    # #     self.cosang = (dy3*dy4 + dz3*dz4)/l3/l4
-    # #     self.ang = atan2(self.sinang, self.cosang)
-    # #     self.sango2 = (dy*dz1 - dz*dy1)/length/l1
-    # #     yaf = self.pnta.y - self.pntf.y
-    # #     zaf = self.pnta.z - self.pntf.z
-    # #     self.radius = sqrt(yaf**2 + zaf**2)
-    # #     zcf = self.pntc.z - self.pntf.z
-    # #     ycf = self.pntc.y - self.pntf.y
-    # #     lcf = sqrt(ycf**2 + zcf**2)
-    # #     self.sinphi = zcf/lcf
-    # #     self.cosphi = ycf/lcf
-
-    # @property
-    # def line(self) -> Line:
-    #     if self._line is None:
-    #         self._line = Line(self.pnta, self.pntb)
-    #     return self._line
     
     @property
     def lineaf(self) -> Line:
@@ -130,206 +69,40 @@ class Arc():
             self._sector = Sector(self.pnta, self.pntb, self.pntf)
         return self._sector
 
-    # @property
-    # def A_seg(self) -> float:
-    #     if self._A_seg is None:
-    #         rad = self.radius
-    #         ang = self.ang
-    #         sinang = self.sinang
-    #         self._A_seg = rad**2/2*(ang-sinang)
-    #     return self._A_seg
-
-    # @property
-    # def A_line(self) -> float:
-    #     if self._A_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._A_line = (ya*zb - za*yb)/2
-    #         print(f'self._A_line = {self._A_line}')
-    #         print(f'self.line.A = {self.line.A}')
-    #     return self._A_line
-
     @property
     def A(self) -> float:
         if self._A is None:
-            # A = self.A_seg + self.line.A
             self._A = self.sector.A + self.lineaf.A + self.linefb.A
-            # print(f'self._A = {self._A}')
-            # print(f'A = {A}')
         return self._A
-
-    # @property
-    # def Ay_seg(self) -> float:
-    #     if self._Ay_seg is None:
-    #         yf = self.pntf.y
-    #         rad = self.radius
-    #         sango2 = self.sango2
-    #         cosphi = self.cosphi
-    #         self._Ay_seg = 2/3*rad**3*sango2**3*cosphi+self.A_seg*yf
-    #     return self._Ay_seg
-
-    # @property
-    # def Ay_line(self) -> float:
-    #     if self._Ay_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._Ay_line = (ya*zb - za*yb)*(ya + yb)/6
-    #         print(f'self._Ay_line = {self._Ay_line}')
-    #         print(f'self.line.Ay = {self.line.Ay}')
-    #     return self._Ay_line
-
+    
     @property
     def Ay(self) -> float:
         if self._Ay is None:
-            # Ay = self.Ay_seg + self.line.Ay
             self._Ay = self.sector.Ay + self.lineaf.Ay + self.linefb.Ay
-            # print(f'self._Ay = {self._Ay}')
-            # print(f'Ay = {Ay}')
         return self._Ay
-
-    # @property
-    # def Az_seg(self) -> float:
-    #     if self._Az_seg is None:
-    #         zf = self.pntf.z
-    #         rad = self.radius
-    #         sango2 = self.sango2
-    #         sinphi = self.sinphi
-    #         self._Az_seg = 2/3*rad**3*sango2**3*sinphi + self._A_seg*zf
-    #     return self._Az_seg
-
-    # @property
-    # def Az_line(self) -> float:
-    #     if self._Az_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._Az_line = (ya*zb - za*yb)*(za + zb)/6
-    #         print(f'self._Az_line = {self._Az_line}')
-    #         print(f'self.line.Az = {self.line.Az}')
-    #     return self._Az_line
 
     @property
     def Az(self) -> float:
         if self._Az is None:
-            # Az = self.Az_seg + self.line.Az
             self._Az = self.sector.Az + self.lineaf.Az + self.linefb.Az
-            # print(f'self._Az = {self._Az}')
-            # print(f'Az = {Az}')
         return self._Az
-
-    # @property
-    # def Ayy_seg(self) -> float:
-    #     if self._Ayy_seg is None:
-    #         yf = self.pntf.y
-    #         rad = self.radius
-    #         ang = self.ang
-    #         sango2 = self.sango2
-    #         sinang = self.sinang
-    #         sinphi = self.sinphi
-    #         cosphi = self.cosphi
-    #         Ayy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
-    #         Azz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
-    #         self._Ayy_seg = Ayy*cosphi**2 + Azz*sinphi**2 + self.A_seg*yf**2
-    #     return self._Ayy_seg
-
-    # @property
-    # def Ayy_line(self) -> float:
-    #     if self._Ayy_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._Ayy_line = (ya**2 + ya*yb + yb**2)*(ya*zb - yb*za)/12
-    #         print(f'self._Ayy_line = {self._Ayy_line}')
-    #         print(f'self.line.Ayy = {self.line.Ayy}')
-    #     return self._Ayy_line
 
     @property
     def Ayy(self) -> float:
         if self._Ayy is None:
-            # Ayy = self.Ayy_seg + self.line.Ayy
             self._Ayy = self.sector.Ayy + self.lineaf.Ayy + self.linefb.Ayy
-            # print(f'self._Ayy = {self._Ayy}')
-            # print(f'Ayy = {Ayy}')
         return self._Ayy
-
-    # @property
-    # def Azz_seg(self) -> float:
-    #     if self._Azz_seg is None:
-    #         zf = self.pntf.z
-    #         rad = self.radius
-    #         ang = self.ang
-    #         sango2 = self.sango2
-    #         sinang = self.sinang
-    #         sinphi = self.sinphi
-    #         cosphi = self.cosphi
-    #         Ayy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
-    #         Azz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
-    #         self._Azz_seg = Azz*cosphi**2 + Ayy*sinphi**2 + self.A_seg*zf**2
-    #     return self._Azz_seg
-
-    # @property
-    # def Azz_line(self) -> float:
-    #     if self._Azz_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._Azz_line = (za**2 + za*zb + zb**2)*(ya*zb - yb*za)/12
-    #         print(f'self._Azz_line = {self._Azz_line}')
-    #         print(f'self.line.Azz = {self.line.Azz}')
-    #     return self._Azz_line
 
     @property
     def Azz(self) -> float:
         if self._Azz is None:
-            # Azz = self.Azz_seg + self.line.Azz
             self._Azz = self.sector.Azz + self.lineaf.Azz + self.linefb.Azz
-            # print(f'self._Azz = {self._Azz}')
-            # print(f'Azz = {Azz}')
         return self._Azz
-
-    # @property
-    # def Ayz_seg(self) -> float:
-    #     if self._Ayz_seg is None:
-    #         yf = self.pntf.y
-    #         zf = self.pntf.z
-    #         rad = self.radius
-    #         ang = self.ang
-    #         sango2 = self.sango2
-    #         sinang = self.sinang
-    #         sinphi = self.sinphi
-    #         cosphi = self.cosphi
-    #         A_seg = rad**2/2*(ang-sinang)
-    #         tempAyy = rad**4/8*(ang-sinang + 2*sinang*sango2**2)
-    #         tempAzz = rad**4/8*(ang-sinang - 2*sinang*sango2**2/3)
-    #         self._Ayz_seg = (tempAyy - tempAzz)*sinphi*cosphi + A_seg*yf*zf
-    #     return self._Ayz_seg
-
-    # @property
-    # def Ayz_line(self) -> float:
-    #     if self._Ayz_line is None:
-    #         ya = self.pnta.y
-    #         za = self.pnta.z
-    #         yb = self.pntb.y
-    #         zb = self.pntb.z
-    #         self._Ayz_line = (ya*zb + 2*ya*za + 2*yb*zb + yb*za)*(ya*zb - yb*za)/24
-    #         print(f'self._Ayz_line = {self._Ayz_line}')
-    #         print(f'self.line.Ayz = {self.line.Ayz}')
-    #     return self._Ayz_line
 
     @property
     def Ayz(self) -> float:
         if self._Ayz is None:
-            # Ayz = self.Ayz_seg + self.line.Ayz
             self._Ayz = self.sector.Ayz + self.lineaf.Ayz + self.linefb.Ayz
-            # print(f'self._Ayz = {self._Ayz}')
-            # print(f'Ayz = {Ayz}')
         return self._Ayz
 
     def add_path(self, verts: Optional[List[Tuple[float, float]]]=None,
@@ -370,10 +143,12 @@ class Arc():
         table.add_column('Ayy', config.l4frm)
         table.add_column('Azz', config.l4frm)
         table.add_column('Ayz', config.l4frm)
-        table.add_row(['Segment', self.A_seg, self.Ay_seg, self.Az_seg,
-                       self.Ayy_seg, self.Azz_seg, self.Ayz_seg])
-        table.add_row(['Line', self.A_line, self.Ay_line, self.Az_line,
-                       self.Ayy_line, self.Azz_line, self.Ayz_line])
+        table.add_row(['Sector', self.sector.A, self.sector.Ay, self.sector.Az,
+                       self.sector.Ayy, self.sector.Azz, self.sector.Ayz])
+        table.add_row(['Line A-F', self.lineaf.A, self.lineaf.Ay, self.lineaf.Az,
+                       self.lineaf.Ayy, self.lineaf.Azz, self.lineaf.Ayz])
+        table.add_row(['Line F-B', self.linefb.A, self.linefb.Ay, self.linefb.Az,
+                       self.linefb.Ayy, self.linefb.Azz, self.linefb.Ayz])
         table.add_row(['Total', self.A, self.Ay, self.Az,
                        self.Ayy, self.Azz, self.Ayz])
         mdstr += table._repr_markdown_()
@@ -399,10 +174,12 @@ class Arc():
         table.add_column('Ayy', config.l4frm)
         table.add_column('Azz', config.l4frm)
         table.add_column('Ayz', config.l4frm)
-        table.add_row(['Segment', self.A_seg, self.Ay_seg, self.Az_seg,
-                       self.Ayy_seg, self.Azz_seg, self.Ayz_seg])
-        table.add_row(['Line', self.line.A, self.line.Ay, self.line.Az,
-                       self.line.Ayy, self.line.Azz, self.line.Ayz])
+        table.add_row(['Sector', self.sector.A, self.sector.Ay, self.sector.Az,
+                       self.sector.Ayy, self.sector.Azz, self.sector.Ayz])
+        table.add_row(['Line A-F', self.lineaf.A, self.lineaf.Ay, self.lineaf.Az,
+                       self.lineaf.Ayy, self.lineaf.Azz, self.lineaf.Ayz])
+        table.add_row(['Line F-B', self.linefb.A, self.linefb.Ay, self.linefb.Az,
+                       self.linefb.Ayy, self.linefb.Azz, self.linefb.Ayz])
         table.add_row(['Total', self.A, self.Ay, self.Az,
                        self.Ayy, self.Azz, self.Ayz])
         outstr += table.__str__()
