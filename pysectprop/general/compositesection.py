@@ -46,12 +46,12 @@ class CompositeSection():
         for attr in self.__dict__:
             if attr[0] == '_':
                 self.__dict__[attr] = None
-                
+
     def mirror_y(self) -> None:
         for section in self.sections:
             section.mirror_y()
         self.reset()
-        
+
     def mirror_z(self) -> None:
         for section in self.sections:
             section.mirror_z()
@@ -233,7 +233,8 @@ class CompositeSection():
         ax.legend(handles=legel, loc=legloc)
         return ax
 
-    def apply_load(self, loadcase, Fx, My, Mz, limit: bool=False):
+    def apply_load(self, loadcase, Fx, My, Mz,
+                   limit: bool=False) -> List[SectionResult]:
         sectresults = []
         for section in self.sections:
             sectresult = SectionResult(section, totalsection=self)

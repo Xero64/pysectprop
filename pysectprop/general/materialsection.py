@@ -1,15 +1,19 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from math import degrees
 from py2md.classes import MDHeading, MDTable
-from .generalsection import GeneralSection
 from ..results.sectionresult import SectionResult
 from .. import config
 
 if TYPE_CHECKING:
     from .material import Material
+    from .generalsection import GeneralSection
+    from .hollowsection import HollowSection
+    SectionType = Union[GeneralSection, HollowSection]
 
-class MaterialSection(GeneralSection):
+class MaterialSection():
+    section: 'SectionType' = None
     material: 'Material' = None
+    label: str = None
     _EA: float = None
     _EAy: float = None
     _EAz: float = None
@@ -22,83 +26,102 @@ class MaterialSection(GeneralSection):
     _EIyp: float = None
     _EIzp: float = None
 
-    def __init__(self, section: GeneralSection, material: 'Material'):
-        super().__init__(section.y, section.z, section.r, label=section.label)
-        for k in section.__dict__:
-            self.__dict__[k] = section.__dict__[k]
+    def __init__(self, section: 'SectionType', material: 'Material',
+                 label: str = None):
+        self.section = section
         self.material = material
+        self.label = label
+        if self.label is None:
+            self.label = self.section.label
         self.reset()
+
+    def reset(self) -> None:
+        for attr in self.__dict__:
+            if attr[0] == '_':
+                self.__dict__[attr] = None
 
     @property
     def EA(self) -> float:
         if self._EA is None:
-            self._EA = self.material.E*self.A
+            self._EA = self.material.E*self.section.A
         return self._EA
 
     @property
     def EAy(self) -> float:
         if self._EAy is None:
-            self._EAy = self.material.E*self.Ay
+            self._EAy = self.material.E*self.section.Ay
         return self._EAy
 
     @property
     def EAz(self) -> float:
         if self._EAz is None:
-            self._EAz = self.material.E*self.Az
+            self._EAz = self.material.E*self.section.Az
         return self._EAz
+
+    @property
+    def cy(self) -> float:
+        return self.section.cy
+
+    @property
+    def cz(self) -> float:
+        return self.section.cz
 
     @property
     def EAyy(self) -> float:
         if self._EAyy is None:
-            self._EAyy = self.material.E*self.Ayy
+            self._EAyy = self.material.E*self.section.Ayy
         return self._EAyy
 
     @property
     def EAzz(self) -> float:
         if self._EAzz is None:
-            self._EAzz = self.material.E*self.Azz
+            self._EAzz = self.material.E*self.section.Azz
         return self._EAzz
 
     @property
     def EAyz(self) -> float:
         if self._EAyz is None:
-            self._EAyz = self.material.E*self.Ayz
+            self._EAyz = self.material.E*self.section.Ayz
         return self._EAyz
 
     @property
     def EIyy(self) -> float:
         if self._EIyy is None:
-            self._EIyy = self.material.E*self.Iyy
+            self._EIyy = self.material.E*self.section.Iyy
         return self._EIyy
 
     @property
     def EIzz(self) -> float:
         if self._EIzz is None:
-            self._EIzz = self.material.E*self.Izz
+            self._EIzz = self.material.E*self.section.Izz
         return self._EIzz
 
     @property
     def EIyz(self) -> float:
         if self._EIyz is None:
-            self._EIyz = self.material.E*self.Iyz
+            self._EIyz = self.material.E*self.section.Iyz
         return self._EIyz
+
+    @property
+    def thp(self) -> float:
+        return self.section.thp
 
     @property
     def EIyp(self) -> float:
         if self._EIyp is None:
-            self._EIyp = self.material.E*self.Iyp
+            self._EIyp = self.material.E*self.section.Iyp
         return self._EIyp
 
     @property
     def EIzp(self) -> float:
         if self._EIzp is None:
-            self._EIzp = self.material.E*self.Izp
+            self._EIzp = self.material.E*self.section.Izp
         return self._EIzp
 
-    def apply_load(self, loadcase: str, lctype: str,
-                   Fx: float, My: float, Mz: float) -> SectionResult:
+    def apply_load(self, loadcase: str, Fx: float, My: float, Mz: float,
+                   limit: bool=False) -> SectionResult:
         sectresult = SectionResult(self)
-        sectresult.set_load(loadcase, lctype, Fx, My, Mz)
+        sectresult.set_load(loadcase, Fx, My, Mz, limit=limit)
         return sectresult
 
     def _repr_markdown_(self) -> str:

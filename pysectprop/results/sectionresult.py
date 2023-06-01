@@ -62,7 +62,7 @@ class SectionResult():
         self.allowed = []
         self.sigma = []
         self.result = []
-        for point in self.materialsection.pnts:
+        for point in self.materialsection.section.pnts:
             self.y.append(point.y)
             self.z.append(point.z)
             yna = point.y-cy
@@ -105,9 +105,10 @@ class SectionResult():
         else:
             table.add_column('RF', '.2f')
         for i, resi in enumerate(self.result):
-            resi = floor(resi*100)/100
+            if resi != float('inf'):
+                resi = floor(resi*100)/100
             if config.msmode:
-                resi = resi-1.0
+                resi = resi - 1.0
             table.add_row([self.y[i], self.z[i], self.yna[i], self.zna[i],
                            self.eps[i], self.sigma[i], self.allowed[i], resi])
         mdstr += table.__str__()
@@ -136,7 +137,7 @@ class SectionResult():
         for i, resi in enumerate(self.result):
             resi = floor(resi*100)/100
             if config.msmode:
-                resi = resi-1.0
+                resi = resi - 1.0
             table.add_row([self.y[i], self.z[i], self.yna[i], self.zna[i],
                            self.eps[i], self.sigma[i], self.allowed[i], resi])
         mdstr += table.__str__()

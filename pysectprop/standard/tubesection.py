@@ -6,6 +6,7 @@ from .. import config
 class TubeSection(HollowSection):
     do: float = None
     di: float = None
+
     def __init__(self, do: float, di: float, label: str=None) -> None:
         self.do = do
         self.di = di

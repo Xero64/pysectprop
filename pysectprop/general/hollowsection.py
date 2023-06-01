@@ -1,12 +1,19 @@
+from typing import TYPE_CHECKING, List
+
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 from matplotlib.pyplot import figure
 
+from .numericalsection import NumericalSection
 from .generalsection import GeneralSection
+
+if TYPE_CHECKING:
+    from .point import Point
 
 
 class Hole(GeneralSection):
-    def check_area(self, display=True) -> None:
+
+    def check_area(self, display=False) -> None:
         self._A = None
         if self.A > 0.0:
             if display:
@@ -17,16 +24,17 @@ class Hole(GeneralSection):
             self.generate_path()
         self._A = None
 
-class HollowSection(GeneralSection):
+class HollowSection(NumericalSection):
     outer: GeneralSection = None
     inner: Hole = None
 
-    def __init__(self, outer: GeneralSection, inner: GeneralSection,
+    def __init__(self, outer: GeneralSection, inner: Hole,
                  label: str=None) -> None:
         self.outer = outer
-        inner.__class__ = Hole
-        inner.reset()
         self.inner = inner
+        if not isinstance(self.inner, Hole) and isinstance(self.inner, GeneralSection):
+            self.inner.__class__ = Hole
+        self.inner.reset()
         self.label = label
         if label is not None:
             self.label = label
@@ -70,6 +78,10 @@ class HollowSection(GeneralSection):
         self.reset()
         self.outer.rotate(θr)
         self.inner.rotate(θr)
+
+    @property
+    def pnts(self) -> List['Point']:
+        return self.outer.pnts
 
     @property
     def A(self) -> float:
