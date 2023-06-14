@@ -214,12 +214,12 @@ class CompositeSection():
         for i, section in enumerate(self.sections):
             verts = []
             codes = []
-            for obj in section.path:
+            for obj in section.section.path:
                 obj.add_path(verts, codes)
             path = Path(verts, codes)
             patch = PathPatch(path)
-            y += section.y
-            z += section.z
+            y += section.section.y
+            z += section.section.z
             patches.append(patch)
             label = ''
             if section.label is not None:
