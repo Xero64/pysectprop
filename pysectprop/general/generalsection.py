@@ -1,5 +1,5 @@
 from math import cos, radians, sin
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, TYPE_CHECKING
 
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
@@ -11,6 +11,9 @@ from .arc import Arc, arc_from_points
 from .line import Line
 from .point import Point
 from .numericalsection import NumericalSection
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
 
 
 class GeneralSection(NumericalSection):
@@ -185,7 +188,7 @@ class GeneralSection(NumericalSection):
                 self._Ayz += obj.Ayz
         return self._Ayz
 
-    def plot(self, ax=None):
+    def plot(self, ax: 'Axes'=None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
@@ -201,7 +204,7 @@ class GeneralSection(NumericalSection):
         ax.set_ylim(min(self.z), max(self.z))
         return ax
 
-    def plot_arc_control(self, ax=None):
+    def plot_arc_control(self, ax: 'Axes'=None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()

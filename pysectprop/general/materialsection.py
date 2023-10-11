@@ -40,6 +40,22 @@ class MaterialSection():
             if attr[0] == '_':
                 self.__dict__[attr] = None
 
+    def mirror_y(self) -> None:
+        self.section.mirror_y()
+        self.reset()
+
+    def mirror_z(self) -> None:
+        self.section.mirror_z()
+        self.reset()
+
+    def translate(self, yt: float, zt: float) -> None:
+        self.section.translate(yt, zt)
+        self.reset()
+
+    def rotate(self, theta: float) -> None:
+        self.section.rotate(theta)
+        self.reset()
+
     @property
     def EA(self) -> float:
         if self._EA is None:

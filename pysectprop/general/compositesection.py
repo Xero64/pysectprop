@@ -12,6 +12,7 @@ from ..results.sectionresult import SectionResult
 from .numericalsection import NumericalSection
 
 if TYPE_CHECKING:
+    from matplotlib.axes import Axes
     from .material import Material
     from .materialsection import MaterialSection
 
@@ -197,7 +198,7 @@ class CompositeSection():
             self._EIzp = self.EIav - self.EIdf*self.cos2thp + self.EIyz*self.sin2thp
         return self._EIzp
 
-    def plot(self, ax=None, legloc: str='best'):
+    def plot(self, ax: 'Axes'=None, legloc: str='best') -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()

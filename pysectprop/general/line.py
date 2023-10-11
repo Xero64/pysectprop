@@ -15,7 +15,7 @@ class Line():
     _Azz: float = None
     _Ayz: float = None
 
-    def __init__(self, pnta: Point, pntb: Point):
+    def __init__(self, pnta: Point, pntb: Point) -> None:
         self.pnta = pnta
         self.pntb = pntb
 

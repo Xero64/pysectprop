@@ -34,7 +34,8 @@ class SectionResult():
             self.totalsection = totalsection
         self.msmode = False
 
-    def set_load(self, loadcase, Fx, My, Mz, limit: bool=False) -> None:
+    def set_load(self, loadcase: str, Fx: float, My: float, Mz: float,
+                 limit: bool=False) -> None:
         self.loadcase = loadcase
         self.limit = limit
         self.Fx = Fx

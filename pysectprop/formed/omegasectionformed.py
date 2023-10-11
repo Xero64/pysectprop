@@ -57,15 +57,15 @@ class OmegaSectionFormed(GeneralSection):
     def __str__(self) -> str:
         outstr = self.section_heading('Omega-Section Formed')
         table = MDTable()
-        table.add_column(f'h<sub>w</sub> ({config.lunit:s})',
+        table.add_column(f'h_w ({config.lunit:s})',
                          config.l1frm, data=[self.hw])
-        table.add_column(f'w<sub>lf</sub> ({config.lunit:s})',
+        table.add_column(f'w_lf ({config.lunit:s})',
                          config.l1frm, data=[self.wlf])
-        table.add_column(f'w<sub>uf</sub> ({config.lunit:s})',
+        table.add_column(f'w_uf ({config.lunit:s})',
                          config.l1frm, data=[self.wuf])
-        table.add_column(f't<sub>s</sub> ({config.lunit:s})',
+        table.add_column(f't_s ({config.lunit:s})',
                          config.l1frm, data=[self.ts])
-        table.add_column(f'r<sub>m</sub> ({config.lunit:s})',
+        table.add_column(f'r_m ({config.lunit:s})',
                          config.l1frm, data=[self.rm])
         outstr += table.__str__()
         outstr += self.section_properties(outtype='str')

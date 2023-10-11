@@ -40,7 +40,7 @@ class Arc():
             zd = self.pntc.z + dz1*K
             self._pntd = Point(yd, zd)
         return self._pntd
-    
+
     @property
     def pnte(self) -> Point:
         if self._pnte is None:
@@ -50,19 +50,19 @@ class Arc():
             ze = self.pntc.z + dz2*K
             self._pnte = Point(ye, ze)
         return self._pnte
-    
+
     @property
     def lineaf(self) -> Line:
         if self._lineaf is None:
             self._lineaf = Line(self.pnta, self.pntf)
         return self._lineaf
-    
+
     @property
     def linefb(self) -> Line:
         if self._linefb is None:
             self._linefb = Line(self.pntf, self.pntb)
         return self._linefb
-    
+
     @property
     def sector(self) -> Sector:
         if self._sector is None:
@@ -74,7 +74,7 @@ class Arc():
         if self._A is None:
             self._A = self.sector.A + self.lineaf.A + self.linefb.A
         return self._A
-    
+
     @property
     def Ay(self) -> float:
         if self._Ay is None:
@@ -213,7 +213,8 @@ def arc_from_points(pnta: Point, pntb: Point, pntc: Point, radius: float) -> Arc
     arc = Arc(pntd, pnte, pntb, pntf)
     return arc
 
-def determine_pntf(ya, za, va, wa, yb, zb, vb, wb) -> Point:
+def determine_pntf(ya: float, za: float, va: float, wa: float,
+                   yb: float, zb: float, vb: float, wb: float) -> Point:
     lbres = (va*za - va*zb - wa*ya + wa*yb)/(va*wb - vb*wa)
     yf = vb*lbres + yb
     zf = wb*lbres + zb

@@ -1,5 +1,5 @@
 from math import atan2, cos, degrees, radians, sin
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from matplotlib.patches import Rectangle
 from matplotlib.pyplot import figure
@@ -7,6 +7,9 @@ from py2md.classes import MDHeading, MDTable
 
 from .. import config
 from .numericalsection import NumericalSection
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
 
 class ThinWalledSection(NumericalSection):
     y: List[float] = None
@@ -100,7 +103,7 @@ class ThinWalledSection(NumericalSection):
         self.reset()
         self.generate_segments()
         self.check_area(display=False)
-    
+
     def rotate(self, theta: float) -> None:
         thrad = radians(theta)
         costh = cos(thrad)
@@ -161,7 +164,7 @@ class ThinWalledSection(NumericalSection):
                 self._Ayz += seg.Ayz
         return self._Ayz
 
-    def plot(self, ax=None):
+    def plot(self, ax: 'Axes'=None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
