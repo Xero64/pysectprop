@@ -8,6 +8,9 @@ from .. import config
 
 K = 1.0 - 4.0*(2.0**0.5 - 1.0)/3.0
 
+# K should actually depend on the angle between the two lines
+# K = 1.0 - 4.0/3.0/(1.0/cos(theta) + 1.0)
+
 class Arc():
     pnta: Point = None
     pntb: Point = None
