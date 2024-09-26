@@ -1,21 +1,20 @@
-from typing import List, Tuple, Optional
 from math import sqrt
+from typing import List, Optional, Tuple
+
 from py2md.classes import MDTable
-from .point import Point
-from .line import Line
-from .sector import Sector
+
 from .. import config
+from .line import Line
+from .point import Point
+from .sector import Sector
 
-K = 1.0 - 4.0*(2.0**0.5 - 1.0)/3.0
-
-# K should actually depend on the angle between the two lines
-# K = 1.0 - 4.0/3.0/(1.0/cos(theta) + 1.0)
 
 class Arc():
     pnta: Point = None
     pntb: Point = None
     pntc: Point = None
     pntf: Point = None
+    _K: float = None
     _pntd: Point = None
     _pnte: Point = None
     _lineaf: Line = None
@@ -35,12 +34,18 @@ class Arc():
         self.pntf = pntf
 
     @property
+    def K(self) -> float:
+        if self._K is None:
+            self._K = calculate_K(self.pnta, self.pntb, self.pntc)
+        return self._K
+
+    @property
     def pntd(self) -> Point:
         if self._pntd is None:
             dy1 = self.pnta.y - self.pntc.y
             dz1 = self.pnta.z - self.pntc.z
-            yd = self.pntc.y + dy1*K
-            zd = self.pntc.z + dz1*K
+            yd = self.pntc.y + dy1*self.K
+            zd = self.pntc.z + dz1*self.K
             self._pntd = Point(yd, zd)
         return self._pntd
 
@@ -49,8 +54,8 @@ class Arc():
         if self._pnte is None:
             dy2 = self.pntb.y - self.pntc.y
             dz2 = self.pntb.z - self.pntc.z
-            ye = self.pntc.y + dy2*K
-            ze = self.pntc.z + dz2*K
+            ye = self.pntc.y + dy2*self.K
+            ze = self.pntc.z + dz2*self.K
             self._pnte = Point(ye, ze)
         return self._pnte
 
@@ -215,6 +220,16 @@ def arc_from_points(pnta: Point, pntb: Point, pntc: Point, radius: float) -> Arc
     pnte = Point(ye, ze)
     arc = Arc(pntd, pnte, pntb, pntf)
     return arc
+
+def calculate_K(pnta: Point, pntb: Point, pntc: Point) -> float:
+    dya = pntc.y - pnta.y
+    dza = pntc.z - pnta.z
+    dyb = pntb.y - pntc.y
+    dzb = pntb.z - pntc.z
+    adb = dya*dyb + dza*dzb
+    abm = sqrt(dya**2 + dza**2)*sqrt(dyb**2 + dzb**2)
+    Kv = 1 - 4*sqrt(adb + abm)/(3*(sqrt(2)*sqrt(abm) + sqrt(adb + abm)))
+    return Kv
 
 def determine_pntf(ya: float, za: float, va: float, wa: float,
                    yb: float, zb: float, vb: float, wb: float) -> Point:

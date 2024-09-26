@@ -48,4 +48,4 @@ ax = circle.plot()
 
 #%%
 # Display Build-Up
-display_markdown(circle.build_up_table())
+display_markdown(circle.build_up_table)
