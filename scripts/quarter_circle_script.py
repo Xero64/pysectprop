@@ -1,10 +1,11 @@
 #%%
 # Import Dependencies
 
-from IPython.display import display_markdown
-from pysectprop import GeneralSection
 from math import pi
-from pysectprop import config
+
+from IPython.display import display_markdown
+from pysectprop import GeneralSection, config
+
 config.l1frm = '.1f'
 config.l2frm = '.2f'
 config.l3frm = '.3f'

@@ -1,5 +1,5 @@
 from math import atan2, cos, degrees, radians, sin
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from matplotlib.patches import Rectangle
 from matplotlib.pyplot import figure

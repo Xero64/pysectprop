@@ -1,9 +1,10 @@
 #%%
 # Import Dependencies
-from math import cos, sin, radians, acos, degrees, tan, sqrt
-from matplotlib.pyplot import figure
-from matplotlib.path import Path
+from math import acos, cos, degrees, radians, sin, sqrt, tan
+
 from matplotlib.patches import PathPatch
+from matplotlib.path import Path
+from matplotlib.pyplot import figure
 
 #%%
 # Specify two segments

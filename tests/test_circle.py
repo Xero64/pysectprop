@@ -1,4 +1,5 @@
-from math import pi, isclose
+from math import isclose, pi
+
 from pysectprop.standard import CircleSection
 
 d = 10.0

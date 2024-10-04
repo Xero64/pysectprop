@@ -1,7 +1,7 @@
 #%%
 # Import Dependencies
-from pysectprop.standard import SquareSection
 from IPython.display import display_markdown
+from pysectprop.standard import SquareSection
 
 #%%
 # Create Square Section

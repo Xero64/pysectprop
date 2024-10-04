@@ -1,9 +1,10 @@
 #%%
 # Import Dependencies
 from math import sqrt
-from matplotlib.pyplot import figure
+
+from matplotlib.patches import Circle, PathPatch
 from matplotlib.path import Path
-from matplotlib.patches import PathPatch, Circle
+from matplotlib.pyplot import figure
 
 #%%
 # Plot Path

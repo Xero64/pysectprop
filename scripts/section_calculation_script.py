@@ -1,9 +1,9 @@
 #%%
 # Import Dependencies
 from IPython.display import display_markdown
-from pysectprop.general import Material
-from pysectprop.formed import CSectionFormed
 from pysectprop import MaterialSection
+from pysectprop.formed import CSectionFormed
+from pysectprop.general import Material
 from pysectprop.results.sectionresult import SectionResult
 
 #%%

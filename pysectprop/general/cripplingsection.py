@@ -1,8 +1,10 @@
-from typing import TYPE_CHECKING
 from math import degrees
+from typing import TYPE_CHECKING
+
 from py2md.classes import MDHeading, MDTable
-from .thinwalledsection import ThinWalledSection
+
 from .. import config
+from .thinwalledsection import ThinWalledSection
 
 if TYPE_CHECKING:
     from .material import Material

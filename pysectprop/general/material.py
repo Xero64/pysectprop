@@ -1,6 +1,9 @@
 from typing import Optional
-from py2md.classes import MDTable, MDHeading
+
+from py2md.classes import MDHeading, MDTable
+
 from .. import config
+
 
 class Material():
     E: float = None

@@ -1,6 +1,7 @@
 from math import isclose, sqrt
-from pysectprop.general.point import Point
+
 from pysectprop.general.line import Line
+from pysectprop.general.point import Point
 
 ya = 12.0
 za = 5.0

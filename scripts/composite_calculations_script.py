@@ -1,11 +1,11 @@
 #%%
 # Import Dependencies
 from IPython.display import display_markdown
+from pysectprop import CompositeSection, MaterialSection, config
+from pysectprop.extruded import LSection
 from pysectprop.general import Material
 from pysectprop.standard import RectangleSection
-from pysectprop.extruded import LSection
-from pysectprop import MaterialSection, CompositeSection
-from pysectprop import config
+
 config.msmode = True
 
 #%%

@@ -2,7 +2,7 @@
 # Import Dependencies
 from IPython.display import display_markdown
 from pysectprop.extruded import ZSection
-from pysectprop.general import Material, MaterialSection, CripplingSection
+from pysectprop.general import CripplingSection, Material, MaterialSection
 
 #%%
 # Create Section

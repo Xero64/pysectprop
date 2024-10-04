@@ -1,4 +1,5 @@
-from math import pi, sin, cos, isclose
+from math import cos, isclose, pi, sin
+
 from pysectprop.general.point import Point
 from pysectprop.general.sector import Sector
 

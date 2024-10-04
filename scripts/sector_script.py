@@ -1,10 +1,11 @@
 #%%
 # Import Dependencies
+from math import cos, degrees, pi, sin
+
 from IPython.display import display_markdown
-from math import sin, cos, pi, degrees
+from pysectprop.general import GeneralSection
 from pysectprop.general.point import Point
 from pysectprop.general.sector import Sector
-from pysectprop.general import GeneralSection
 
 #%%
 # Properties of a Sector

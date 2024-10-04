@@ -1,6 +1,7 @@
 #%%
 # Import Dependencies
 from math import degrees
+
 from IPython.display import display_markdown
 from pysectprop.extruded import LSection
 

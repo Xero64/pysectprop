@@ -1,11 +1,13 @@
-from typing import TYPE_CHECKING, Optional, Union, List
 from math import floor
+from typing import TYPE_CHECKING, List, Optional, Union
+
 from py2md.classes import MDHeading, MDTable
+
 from .. import config
 
 if TYPE_CHECKING:
-    from ..general.materialsection import MaterialSection
     from ..general.compositesection import CompositeSection
+    from ..general.materialsection import MaterialSection
 
 class SectionResult():
     loadcase: str = None

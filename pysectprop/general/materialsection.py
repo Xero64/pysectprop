@@ -1,13 +1,15 @@
-from typing import TYPE_CHECKING, Union
 from math import degrees
+from typing import TYPE_CHECKING, Union
+
 from py2md.classes import MDHeading, MDTable
-from ..results.sectionresult import SectionResult
+
 from .. import config
+from ..results.sectionresult import SectionResult
 
 if TYPE_CHECKING:
-    from .material import Material
     from .generalsection import GeneralSection
     from .hollowsection import HollowSection
+    from .material import Material
     SectionType = Union[GeneralSection, HollowSection]
 
 class MaterialSection():

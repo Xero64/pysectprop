@@ -1,4 +1,5 @@
 from math import isclose, pi
+
 from pysectprop.general import Material, MaterialSection
 from pysectprop.standard import RectangleSection
 

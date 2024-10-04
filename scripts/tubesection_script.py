@@ -1,9 +1,8 @@
 #%%
 # Import Dependencies
 from IPython.display import display_markdown
-from pysectprop.standard import TubeSection
-from pysectprop.standard import CircleSection
 from pysectprop.general import HollowSection
+from pysectprop.standard import CircleSection, TubeSection
 
 #%%
 # Create Tube Section

@@ -1,8 +1,11 @@
-from typing import List, Tuple, Optional
 from math import sqrt
+from typing import List, Optional, Tuple
+
 from py2md.classes import MDTable
-from .point import Point
+
 from .. import config
+from .point import Point
+
 
 class Line():
     pnta: Point = None

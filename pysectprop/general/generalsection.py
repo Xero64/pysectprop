@@ -1,5 +1,5 @@
 from math import cos, radians, sin
-from typing import List, Tuple, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Tuple, Union
 
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
@@ -9,8 +9,8 @@ from py2md.classes import MDTable
 from .. import config
 from .arc import Arc, arc_from_points
 from .line import Line
-from .point import Point
 from .numericalsection import NumericalSection
+from .point import Point
 
 if TYPE_CHECKING:
     from matplotlib.axes import Axes

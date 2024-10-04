@@ -4,8 +4,8 @@ from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 from matplotlib.pyplot import figure
 
-from .numericalsection import NumericalSection
 from .generalsection import GeneralSection
+from .numericalsection import NumericalSection
 
 if TYPE_CHECKING:
     from .point import Point

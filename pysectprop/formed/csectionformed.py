@@ -1,7 +1,9 @@
 from py2md.classes import MDTable
+
+from .. import config
 from ..general.generalsection import GeneralSection
 from ..general.thinwalledsection import ThinWalledSection
-from .. import config
+
 
 class CSectionFormed(GeneralSection):
     hw: float = None # Height of web

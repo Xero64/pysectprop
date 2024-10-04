@@ -1,9 +1,11 @@
 #%%
 # Import Dependencies
 from math import degrees
+
 from IPython.display import display_markdown
-from pysectprop.general import GeneralSection
 from pysectprop import config
+from pysectprop.general import GeneralSection
+
 config.l1frm = '.1f'
 config.l2frm = '.2f'
 config.l3frm = '.3f'

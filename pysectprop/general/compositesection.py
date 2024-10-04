@@ -13,6 +13,7 @@ from .numericalsection import NumericalSection
 
 if TYPE_CHECKING:
     from matplotlib.axes import Axes
+
     from .material import Material
     from .materialsection import MaterialSection
 

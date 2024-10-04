@@ -1,8 +1,9 @@
 #%%
 # Hollow Path
-from matplotlib.pyplot import figure
-from matplotlib.path import Path
 from matplotlib.patches import PathPatch
+from matplotlib.path import Path
+from matplotlib.pyplot import figure
+
 
 def reverse_simple_path(path: Path):
     vertices = path.vertices.copy()

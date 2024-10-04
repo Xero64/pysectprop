@@ -1,6 +1,8 @@
 from py2md.classes import MDTable
-from ..general.generalsection import GeneralSection
+
 from .. import config
+from ..general.generalsection import GeneralSection
+
 
 class CircleSection(GeneralSection):
     d: float = None

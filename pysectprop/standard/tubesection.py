@@ -1,7 +1,9 @@
 from py2md.classes import MDTable
-from ..standard.circlesection import CircleSection
-from ..general.hollowsection import HollowSection
+
 from .. import config
+from ..general.hollowsection import HollowSection
+from ..standard.circlesection import CircleSection
+
 
 class TubeSection(HollowSection):
     do: float = None

@@ -1,7 +1,7 @@
 #%%
 # Test Rectangle Section
-from pysectprop.standard import RectangleSection
 from IPython.display import display_markdown
+from pysectprop.standard import RectangleSection
 
 #%%
 # Create Rectangle Section

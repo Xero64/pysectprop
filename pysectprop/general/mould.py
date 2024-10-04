@@ -1,12 +1,11 @@
-from typing import List, TYPE_CHECKING, Tuple
+from math import sqrt  # , cos, asin
+from typing import TYPE_CHECKING, List, Tuple
 
-from math import sqrt#, cos, asin
-
-from .point import Point
 from .arc import arc_from_points
+from .compositesection import CompositeSection
 from .generalsection import GeneralSection
 from .materialsection import MaterialSection
-from .compositesection import CompositeSection
+from .point import Point
 
 if TYPE_CHECKING:
     from .material import Material
