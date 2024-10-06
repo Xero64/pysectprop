@@ -5,6 +5,7 @@ from matplotlib.collections import PatchCollection
 from matplotlib.patches import Patch, PathPatch
 from matplotlib.path import Path
 from matplotlib.pyplot import figure, rcParams
+
 from py2md.classes import MDHeading, MDTable
 
 from .. import config

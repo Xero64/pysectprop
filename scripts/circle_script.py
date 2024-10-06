@@ -1,6 +1,7 @@
 #%%
 # Import Dependencies
 from IPython.display import display_markdown
+
 from pysectprop import GeneralSection, config
 
 config.l1frm = '.1f'

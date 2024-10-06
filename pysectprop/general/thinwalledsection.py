@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List
 
 from matplotlib.patches import Rectangle
 from matplotlib.pyplot import figure
+
 from py2md.classes import MDHeading, MDTable
 
 from .. import config

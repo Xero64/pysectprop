@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, List, Tuple, Union
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 from matplotlib.pyplot import figure
+
 from py2md.classes import MDTable
 
 from .. import config

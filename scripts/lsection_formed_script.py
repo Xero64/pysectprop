@@ -1,6 +1,7 @@
 #%%
 # Test Section
 from IPython.display import display_markdown
+
 from pysectprop.formed import LSectionFormed
 
 #%%
