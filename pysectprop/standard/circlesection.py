@@ -30,7 +30,7 @@ class CircleSection(GeneralSection):
         table.add_column(f'd ({config.lunit:s})',
                          config.l1frm, data=[self.d])
         outstr += table.__str__()
-        outstr += self.section_properties(outtype='str')
+        outstr += self.section_properties(outtype=str)
         return outstr
 
     def __repr__(self) -> str:

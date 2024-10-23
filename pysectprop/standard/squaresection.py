@@ -32,7 +32,7 @@ class SquareSection(GeneralSection):
         table.add_column(f's ({config.lunit:s})',
                          config.l1frm, data=[self.s])
         outstr += table.__str__()
-        outstr += self.section_properties(outtype='str')
+        outstr += self.section_properties(outtype=str)
         return outstr
 
     def __repr__(self) -> str:

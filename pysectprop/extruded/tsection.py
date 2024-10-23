@@ -51,7 +51,7 @@ class TSection(GeneralSection):
         table.add_column(f't_f ({config.lunit:s})', config.l1frm, data=[self.tf])
         table.add_column(f'r_f ({config.lunit:s})', config.l1frm, data=[self.rf])
         mdstr += table.__str__()
-        mdstr += self.section_properties(outtype='str')
+        mdstr += self.section_properties(outtype=str)
         return mdstr
 
     def __repr__(self) -> str:

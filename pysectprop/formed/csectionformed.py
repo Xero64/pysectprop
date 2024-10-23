@@ -68,7 +68,7 @@ class CSectionFormed(GeneralSection):
         table.add_column(f'r_m ({config.lunit:s})',
                          config.l1frm, data=[self.rm])
         mdstr += table.__str__()
-        mdstr += self.section_properties(outtype='str')
+        mdstr += self.section_properties(outtype=str)
         return mdstr
 
     def __repr__(self) -> str:

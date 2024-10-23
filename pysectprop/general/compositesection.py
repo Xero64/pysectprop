@@ -1,5 +1,5 @@
 from math import atan2, degrees, sqrt
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Patch, PathPatch
@@ -18,8 +18,9 @@ if TYPE_CHECKING:
     from .material import Material
     from .materialsection import MaterialSection
 
+
 class CompositeSection():
-    sections: List['MaterialSection'] = None
+    sections: list['MaterialSection'] = None
     label: str = None
     _EA: float = None
     _EAy: float = None
@@ -41,7 +42,7 @@ class CompositeSection():
     _EIyp: float = None
     _EIzp: float = None
 
-    def __init__(self, sections: List['MaterialSection'], label: str=None) -> None:
+    def __init__(self, sections: list['MaterialSection'], label: str=None) -> None:
         self.sections = sections
         self.label = label
 
@@ -237,7 +238,7 @@ class CompositeSection():
         return ax
 
     def apply_load(self, loadcase, Fx, My, Mz,
-                   limit: bool=False) -> List[SectionResult]:
+                   limit: bool=False) -> list[SectionResult]:
         sectresults = []
         for section in self.sections:
             sectresult = SectionResult(section, totalsection=self)

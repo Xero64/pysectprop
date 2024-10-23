@@ -55,7 +55,7 @@ class LSectionFormed(GeneralSection):
         table.add_column(f'r_m ({config.lunit:s})',
                          config.l1frm, data=[self.rm])
         outstr += table.__str__()
-        outstr += self.section_properties(outtype='str')
+        outstr += self.section_properties(outtype=str)
         return outstr
 
     def __repr__(self) -> str:

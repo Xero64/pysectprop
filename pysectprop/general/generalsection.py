@@ -1,5 +1,5 @@
 from math import cos, radians, sin
-from typing import TYPE_CHECKING, List, Tuple, Union
+from typing import TYPE_CHECKING
 
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
@@ -18,14 +18,14 @@ if TYPE_CHECKING:
 
 
 class GeneralSection(NumericalSection):
-    y: List[float] = None
-    z: List[float] = None
-    r: List[float] = None
-    pnts: List[Point] = None
-    path: List[Union[Line, Arc]] = None
+    y: list[float] = None
+    z: list[float] = None
+    r: list[float] = None
+    pnts: list[Point] = None
+    path: list[Line | Arc] = None
 
-    def __init__(self, y: List[float], z: List[float], r: List[float],
-                 label: str=None) -> None:
+    def __init__(self, y: list[float], z: list[float], r: list[float],
+                 label: str = None) -> None:
         newy, newz, newr = cleanup_points(y, z, r)
         self.y = newy
         self.z = newz
@@ -52,7 +52,7 @@ class GeneralSection(NumericalSection):
             yi = self.y[i]
             zi = self.z[i]
             pnts.append(Point(yi, zi))
-        lines: List[Line] = []
+        lines: list[Line] = []
         for i in range(numpnt):
             a = i
             b = i+1
@@ -62,7 +62,7 @@ class GeneralSection(NumericalSection):
             pntb = pnts[b]
             line = Line(pnta, pntb)
             lines.append(line)
-        arcs: List[Arc] = []
+        arcs: list[Arc] = []
         for i in range(numpnt):
             radius = self.r[i]
             if i == 0:
@@ -189,7 +189,7 @@ class GeneralSection(NumericalSection):
                 self._Ayz += obj.Ayz
         return self._Ayz
 
-    def plot(self, ax: 'Axes'=None) -> 'Axes':
+    def plot(self, ax: 'Axes | None' = None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
@@ -205,7 +205,7 @@ class GeneralSection(NumericalSection):
         ax.set_ylim(min(self.z), max(self.z))
         return ax
 
-    def plot_arc_control(self, ax: 'Axes'=None) -> 'Axes':
+    def plot_arc_control(self, ax: 'Axes | None' = None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
@@ -243,7 +243,7 @@ class GeneralSection(NumericalSection):
 
     def __str__(self) -> str:
         mdstr = self.section_heading('General Section')
-        mdstr += self.section_properties(outtype='str')
+        mdstr += self.section_properties(outtype=str)
         return mdstr
 
     def __repr__(self) -> str:
@@ -253,8 +253,8 @@ class GeneralSection(NumericalSection):
             outstr = f'<GeneralSection {self.label:s}>'
         return outstr
 
-def cleanup_points(y: List[float], z: List[float],
-                   r: List[float]) -> Tuple[List[float], List[float], List[float]]:
+def cleanup_points(y: list[float], z: list[float],
+                   r: list[float]) -> tuple[list[float], list[float], list[float]]:
     keep = []
     num = len(y)
     for i in range(num):

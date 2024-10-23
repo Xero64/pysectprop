@@ -1,5 +1,5 @@
 from math import atan2, cos, degrees, radians, sin
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from matplotlib.patches import Rectangle
 from matplotlib.pyplot import figure
@@ -12,12 +12,13 @@ from .numericalsection import NumericalSection
 if TYPE_CHECKING:
     from matplotlib.axes import Axes
 
+
 class ThinWalledSection(NumericalSection):
-    y: List[float] = None
-    z: List[float] = None
-    t: List[float] = None
+    y: list[float] = None
+    z: list[float] = None
+    t: list[float] = None
     label: str = None
-    segs: List['WallSegment'] = None
+    segs: list['WallSegment'] = None
 
     def __init__(self, y: list, z: list, t: list, label: str=None) -> None:
         lent = len(t)
@@ -374,7 +375,7 @@ class WallSegment():
         thrad = radians(self.th)
         yo = self.ya+self.ts/2*sin(thrad)
         zo = self.za-self.ts/2*cos(thrad)
-        rect = Rectangle((yo, zo), self.ls, self.ts, self.th)
+        rect = Rectangle((yo, zo), self.ls, self.ts, angle=self.th)
         return rect
 
     def __repr__(self) -> str:

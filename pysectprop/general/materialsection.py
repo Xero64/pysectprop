@@ -1,5 +1,5 @@
 from math import degrees
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any
 
 from py2md.classes import MDHeading, MDTable
 
@@ -7,13 +7,15 @@ from .. import config
 from ..results.sectionresult import SectionResult
 
 if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+
     from .generalsection import GeneralSection
     from .hollowsection import HollowSection
     from .material import Material
-    SectionType = Union[GeneralSection, HollowSection]
+
 
 class MaterialSection():
-    section: 'SectionType' = None
+    section: 'GeneralSection | HollowSection' = None
     material: 'Material' = None
     label: str = None
     _EA: float = None
@@ -28,7 +30,7 @@ class MaterialSection():
     _EIyp: float = None
     _EIzp: float = None
 
-    def __init__(self, section: 'SectionType', material: 'Material',
+    def __init__(self, section: 'GeneralSection | HollowSection', material: 'Material',
                  label: str = None):
         self.section = section
         self.material = material
@@ -135,6 +137,9 @@ class MaterialSection():
         if self._EIzp is None:
             self._EIzp = self.material.E*self.section.Izp
         return self._EIzp
+
+    def plot(self, **kwargs: dict[str, Any]) -> 'Axes':
+        return self.section.plot(**kwargs)
 
     def apply_load(self, loadcase: str, Fx: float, My: float, Mz: float,
                    limit: bool=False) -> SectionResult:

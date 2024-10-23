@@ -1,5 +1,4 @@
 from math import sqrt
-from typing import List, Optional, Tuple
 
 from py2md.classes import MDTable
 
@@ -113,9 +112,9 @@ class Arc():
             self._Ayz = self.sector.Ayz + self.lineaf.Ayz + self.linefb.Ayz
         return self._Ayz
 
-    def add_path(self, verts: Optional[List[Tuple[float, float]]]=None,
-                 codes: Optional[List[float]]=None) -> Tuple[List[Tuple[float, float]],
-                                                             List[float]]:
+    def add_path(self, verts: list[tuple[float, float]] | None = None,
+                 codes: list[float] | None = None) -> tuple[list[tuple[float, float]],
+                                                            list[float]]:
         if verts is None:
             verts = []
         if codes is None:

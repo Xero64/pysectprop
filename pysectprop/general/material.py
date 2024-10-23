@@ -1,5 +1,3 @@
-from typing import Optional
-
 from py2md.classes import MDHeading, MDTable
 
 from .. import config
@@ -25,7 +23,7 @@ class Material():
         self.Fty = Fty
         self.Fcy = Fcy
 
-    def set_ultimate_strengths(self, Ftu: float, Fcu: Optional[float]=None) -> None:
+    def set_ultimate_strengths(self, Ftu: float, Fcu: float | None = None) -> None:
         self.Ftu = Ftu
         if Fcu is None:
             self.Fcu = Ftu

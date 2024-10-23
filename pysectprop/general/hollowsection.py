@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
@@ -8,6 +8,8 @@ from .generalsection import GeneralSection
 from .numericalsection import NumericalSection
 
 if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+
     from .point import Point
 
 
@@ -80,7 +82,7 @@ class HollowSection(NumericalSection):
         self.inner.rotate(θr)
 
     @property
-    def pnts(self) -> List['Point']:
+    def pnts(self) -> list['Point']:
         return self.outer.pnts
 
     @property
@@ -119,7 +121,7 @@ class HollowSection(NumericalSection):
             self._Ayz = self.outer.Ayz + self.inner.Ayz
         return self._Ayz
 
-    def plot(self, ax=None):
+    def plot(self, ax: 'Axes | None' = None) -> 'Axes':
         if ax is None:
             fig = figure(figsize=(12, 8))
             ax = fig.gca()
@@ -155,7 +157,7 @@ class HollowSection(NumericalSection):
 
     def __str__(self) -> str:
         mdstr = self.section_heading('Hollow Section')
-        mdstr += self.section_properties(outtype='str')
+        mdstr += self.section_properties(outtype=str)
         return mdstr
 
     def __repr__(self) -> str:

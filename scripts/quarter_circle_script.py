@@ -68,7 +68,7 @@ for obj in qcircle1.path:
 
 #%%
 # Display Build-Up
-display_markdown(qcircle1.build_up_table())
+display_markdown(qcircle1.build_up_table)
 
 #%%
 # Quarter Circle 2
@@ -83,7 +83,7 @@ ax = qcircle2.plot()
 
 display_markdown(qcircle2)
 
-display_markdown(qcircle2.build_up_table())
+display_markdown(qcircle2.build_up_table)
 
 #%%
 # Quarter Circle 3
@@ -98,7 +98,7 @@ ax = qcircle3.plot()
 
 display_markdown(qcircle3)
 
-display_markdown(qcircle3.build_up_table())
+display_markdown(qcircle3.build_up_table)
 
 #%%
 # Quarter Circle 4
@@ -113,4 +113,4 @@ ax = qcircle4.plot()
 
 display_markdown(qcircle4)
 
-display_markdown(qcircle4.build_up_table())
+display_markdown(qcircle4.build_up_table)

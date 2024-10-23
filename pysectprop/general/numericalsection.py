@@ -238,7 +238,7 @@ class NumericalSection():
         return self.section_properties(nohead=False, outtype='md')
 
     def __str__(self) -> str:
-        return self.section_properties(nohead=False, outtype='str')
+        return self.section_properties(nohead=False, outtype=str)
 
     def __repr__(self) -> str:
         if self.label is None:

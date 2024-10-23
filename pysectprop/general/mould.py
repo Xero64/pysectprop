@@ -1,5 +1,5 @@
 from math import sqrt  # , cos, asin
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING
 
 from .arc import arc_from_points
 from .compositesection import CompositeSection
@@ -10,14 +10,15 @@ from .point import Point
 if TYPE_CHECKING:
     from .material import Material
 
-class Mould(CompositeSection):
-    y: List[float] = None
-    z: List[float] = None
-    r: List[float] = None
-    _num: int = None
-    _n: List[Tuple[float, float]] = None
 
-    def __init__(self, y: List[float], z: List[float], r: List[float],
+class Mould(CompositeSection):
+    y: list[float] = None
+    z: list[float] = None
+    r: list[float] = None
+    _num: int = None
+    _n: list[tuple[float, float]] = None
+
+    def __init__(self, y: list[float], z: list[float], r: list[float],
                  label: str=None) -> None:
         self.y = y
         self.z = z
@@ -36,7 +37,7 @@ class Mould(CompositeSection):
         return self._num
 
     @property
-    def n(self) -> List[Tuple[float, float]]:
+    def n(self) -> list[tuple[float, float]]:
         if self._n is None:
             self._n = []
             for i in range(self.num):

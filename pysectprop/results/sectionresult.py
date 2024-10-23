@@ -1,5 +1,5 @@
 from math import floor
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING
 
 from py2md.classes import MDHeading, MDTable
 
@@ -9,26 +9,27 @@ if TYPE_CHECKING:
     from ..general.compositesection import CompositeSection
     from ..general.materialsection import MaterialSection
 
+
 class SectionResult():
     loadcase: str = None
     limit: bool = None
     msmode: bool = None
-    totalsection: Union['MaterialSection', 'CompositeSection'] = None
+    totalsection: 'MaterialSection | CompositeSection' = None
     materialsection: 'MaterialSection' = None
     Fx: float = None
     My: float = None
     Mz: float = None
-    y: List[float] = None
-    z: List[float] = None
+    y: list[float] = None
+    z: list[float] = None
     yna: float = None
     zna: float = None
-    eps: List[float] = None
-    allowed: List[float] = None
-    sigma: List[float] = None
-    result: List[float] = None
+    eps: list[float] = None
+    allowed: list[float] = None
+    sigma: list[float] = None
+    result: list[float] = None
 
     def __init__(self, materialsection: 'MaterialSection',
-                 totalsection: Optional['CompositeSection']=None) -> None:
+                 totalsection: 'CompositeSection | None' = None) -> None:
         self.materialsection = materialsection
         if totalsection is None:
             self.totalsection = materialsection
