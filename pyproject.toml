@@ -1,0 +1,21 @@
+[project]
+name = "pysectprop"
+version = "0.2.0"
+authors = [
+  { name="Xero64", email="xero64@gmail.com" },
+]
+description = "Python Package for Section Properties"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/Xero64/pysectprop"
+Issues = "https://github.com/Xero64/pysectprop/issues"
