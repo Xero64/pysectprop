@@ -8,6 +8,6 @@ l2frm = '.1f' # Length**2 format
 l3frm = '.0f' # Length**3 format
 l4frm = '.0f' # Length**4 format
 sfrm = '.1f' # Stress format
-efrm = '.0f' # Elastic Modulus formaty
+efrm = '.0f' # Elastic Modulus format
 
 msmode = False # Output Margins of Safety
